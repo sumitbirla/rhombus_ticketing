@@ -1,0 +1,32 @@
+<style>
+    .form-inline .control-label { width: 120px; }
+</style>
+
+<h2>New Case</h2>
+<hr/>
+
+<%= simple_form_for([:admin, :ticketing, @case], html: { class: 'form-inline' }) do |f| %>
+
+    <%= render 'admin/shared/error_messages', object: f.object %>
+
+    <%= f.association :case_queue %>
+    <%= f.association :assignee %>
+    <%= f.input :name %>
+    <%= f.input :user_id, label: 'User ID' %>
+    <%= f.input :received_via, collection: ['Email', 'Phone', 'Other'] %>
+    <%= f.input :email %>
+    <%= f.input :phone %>
+    <%= f.input :priority, collection: ['Normal', 'Important', 'Critical'] %>
+    <%= f.input :status, collection: ['New', 'Open', 'Closed'] %>
+    <%= f.input :subject, input_html: { class: 'span6' }  %>
+    <%= f.input :description, input_html: { class: 'span8', rows: 6 } %>
+
+    <div class="form-actions">
+      <%= f.button :submit %>
+    </div>
+<% end %>
+
+
+<% content_for :menu do
+    render "admin/shared/ticketing_menu"
+end %>

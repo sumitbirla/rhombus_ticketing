@@ -1,0 +1,57 @@
+<style>
+    .form-inline .control-label { width: 120px; }
+    .form-inline .panel .form-group { margin: 10px; }
+</style>
+
+<h2><%= @case_queue.name %></h2>
+<hr/>
+
+<%= simple_form_for([:admin, :ticketing, @case_queue], html: { class: 'form-inline' }) do |f| %>
+
+  <%= render 'admin/shared/error_messages', object: f.object %>
+
+  <%= f.input :pop3_error, as: :hidden %>
+
+  <%= f.input :name %>
+  <%= f.input :notify_email %>
+  <%= f.association :assigned %>
+  <%= f.input :reply_name %>
+  <%= f.input :reply_email %>
+  <%= f.input :reply_signature, input_html: { class: 'span4', rows: 5 } %>
+  <%= f.input :web_instruction, input_html: { class: 'span6', rows: 3 } %>
+  <%= f.input :web_confirmation, input_html: { class: 'span6', rows: 3 } %>
+  
+
+  <div class="panel panel-info">
+	<div class="panel-heading">POP3 Gateway</div>
+    <div class="panel-body">
+        <%= f.input :pop3_enabled, label: 'Enabled' %>
+        <%= f.input :pop3_host, label: 'Host', placeholder: 'eg. pop3.mydomain.com' %>
+        <%= f.input :pop3_use_ssl, label: 'Use SSL' %>
+        <%= f.input :pop3_login, label: 'Login' %>
+        <%= f.input :pop3_password, as: :string, label: 'Password' %>
+    </div>
+  </div>
+  
+  <div class="form-actions">
+  	<%= f.button :submit %>
+  </div>
+<% end %>
+
+
+
+<% content_for :title do %>
+	Case Queues: <%= @case_queue.name %>
+<% end %>
+
+
+<% content_for :menu do
+    render "admin/shared/ticketing_menu"
+end %>
+
+
+<% content_for :breadcrumbs do %>
+	<li><a href="#">Marketing</a></li>
+	<li><%= link_to "Case Queues", admin_ticketing_case_queues_path %></li>
+	<li class="active"><%= @case_queue.name %></li>
+<% end %>

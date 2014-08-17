@@ -1,0 +1,7 @@
+            <li class="<%= 'active' if request.original_url.include? 'admin/ticketing' %>">
+              <a href="#"><i class="fa fa-headphones fa-fw"></i> Ticketing  <span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level">
+                <li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
+                <li><%= link_to "My Cases", admin_ticketing_cases_path %></li>
+              </ul>
+            </li>
