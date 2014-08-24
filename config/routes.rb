@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   
+  namespace :account do
+    resources :cases
+  end
+  
+  
   namespace :admin do
       
     namespace :ticketing do
