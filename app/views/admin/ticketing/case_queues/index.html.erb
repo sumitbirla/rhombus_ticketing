@@ -22,7 +22,7 @@
 		<td><%= queue.cases.open.length %></td>
 		<td>
 			<%= link_to "cases", admin_ticketing_cases_path(queue_id: queue.id) %> &nbsp;
-			<%= link_to "edit", edit_admin_ticketing_case_queue_path(queue) %> &nbsp;
+			<%= link_to "configure", edit_admin_ticketing_case_queue_path(queue) %> &nbsp;
 			<%= link_to "delete", 
 						  { action: "destroy", id: queue.id }, 
 						  method: :delete, 

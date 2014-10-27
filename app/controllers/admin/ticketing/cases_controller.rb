@@ -1,5 +1,5 @@
 class Admin::Ticketing::CasesController < Admin::BaseController
-  
+
   def index
     @cases = Case.page(params[:page]).order('name')
   end

@@ -13,7 +13,7 @@
     <%= f.association :assignee %>
     <%= f.input :name %>
     <%= f.input :user_id, label: 'User ID' %>
-    <%= f.input :received_via, collection: ['Email', 'Phone', 'Other'] %>
+    <%= f.input :received_via, collection: ['Web', 'Email', 'Phone', 'Other'] %>
     <%= f.input :email %>
     <%= f.input :phone %>
     <%= f.input :priority, collection: ['Normal', 'Important', 'Critical'] %>
