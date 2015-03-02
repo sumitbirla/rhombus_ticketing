@@ -47,8 +47,7 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   private
   
     def case_queue_params
-      params.require(:case_queue).permit(:name, :notify_email, :initial_assignment, :reply_name, :reply_email, :reply_signature, 
-      :web_instruction, :web_confirmation, :pop3_enabled, :pop3_host, :pop3_login, :pop3_password, :pop3_use_ssl, :pop3_error)
+      params.require(:case_queue).permit!
     end
   
 end

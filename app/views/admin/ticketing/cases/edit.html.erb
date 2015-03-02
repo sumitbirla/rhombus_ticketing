@@ -13,20 +13,22 @@
     <%= f.association :assignee %>
     <%= f.input :name %>
     <%= f.input :user_id, label: 'User ID' %>
-    <%= f.input :received_via, collection: ['Web', 'Email', 'Phone', 'Other'] %>
+    <%= f.input :received_via, collection: [:web, :email, :phone, :other] %>
     <%= f.input :email %>
     <%= f.input :phone %>
-    <%= f.input :priority, collection: ['Normal', 'Important', 'Critical'] %>
-    <%= f.input :status, collection: ['New', 'Open', 'Closed'] %>
-    <%= f.input :subject, input_html: { class: 'span6' }  %>
-    <%= f.input :description, input_html: { class: 'span8', rows: 6 } %>
+    <%= f.input :priority, collection: [:low, :normal, :high] %>
+    <%= f.input :status, collection: [:new, :open, :closed] %>
+    <%= f.input :subject %>
+    <%= f.input :description, input_html: { rows: 6 } %>
 
-    <div class="form-actions">
-      <%= f.button :submit %>
-    </div>
+    <%= f.button :submit %>
+      
 <% end %>
 
 
-<% content_for :menu do
-    render "admin/shared/ticketing_menu"
-end %>
+<% content_for :breadcrumbs do %>
+	<li><a href="#">Ticketing</a></li>
+	<li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
+  <li><%= link_to @case.case_queue.name, admin_ticketing_cases_path(case_queue_id: @case.case_queue_id) %></li>
+  <li><%= @case.persisted? ? @case.id.to_s : 'new' %></li>
+<% end %>

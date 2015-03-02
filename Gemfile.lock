@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     rhombus_ticketing (0.0.1)
+      mail
       rails
 
 GEM

@@ -6,9 +6,9 @@
 
 <table class="table table-striped table-condensed">
 	<tr>
-        <th>ID</th>
-        <th>Status</th>
-        <th>Priority</th>
+    <th>ID</th>
+    <th>Status</th>
+    <th>Priority</th>
 		<th>From</th>
 		<th>Subject</th>
 		<th>Assigned to</th>
@@ -19,24 +19,28 @@
 	<% @cases.each do |c| %>
 	<tr>
 		<td><%= link_to c.id, admin_ticketing_case_path(c) %></td>
-        <td><span class="label"><%= c.status %></span></td>
-        <td><span class="label"><%= c.priority %></span></td>
-        <td>
+    <td><%= case_status_indicator c %></td>
+    <td><%= case_priority_indicator c %></td>
+    <td>
           <% if c.user_id %>
             <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
           <% else %>
             <%= c.email || c.phone %>
           <% end %>
-        </td>
-		<td><%= c.subject %></td>
+    </td>
+		<td>
+      <%= c.subject %> 
+      <% if c.attachments > 0 %>
+        <i class="fa fa-paperclip"></i>
+      <% end %>
+    </td>
 		<td><% unless c.assigned_to.nil? %>
 			<%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
 			<% else %>
 			- none -
 			<% end%>
 		</td>
-		<td><%= c.updated_at %></td>
-
+		<td><%= systime c.updated_at %></td>
 		<td>
 			<%= link_to "edit", edit_admin_ticketing_case_path(c) %> &nbsp;
 			<%= link_to "delete", 

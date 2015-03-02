@@ -1,0 +1,69 @@
+<h2>
+  <div class="pull-right">
+    <%= case_status_indicator(@case) %> 
+    <%= case_priority_indicator(@case)%>
+  </div>
+  Case #<%= @case.id %></h2>
+<b>Submitted: </b> <%= time_ago_in_words(@case.created_at) %> ago
+
+<table class="table summary table-condensed table-bordered">
+  <tr>
+    <td class="col-md-3">Assigned to</td>
+    <td><%= link_to @case.assignee, admin_system_user_path(@case.assignee) %></td>
+  </tr>
+  <tr>
+    <td>Received</td>
+    <td><%= systime @case.created_at %></td>
+  </tr>
+  <tr>
+    <td>Via</td>
+    <td>
+      <%= @case.received_via %> 
+    </td>
+  </tr>
+</table>
+
+<table class="table summary table-condensed table-bordered">
+  <tr>
+    <td class="col-md-3">Customer</td>
+    <td>
+      <% if @case.user_id %>
+        <%= link_to @case.user.name %>
+      <% else %>
+        <%= @case.name %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td><%= @case.email %></td>
+  </tr>
+  <tr>
+    <td>Phone</td>
+    <td>
+      <% unless @case.phone.blank? %>
+        <%= @case.phone %>
+      <% else %>
+        <span class="light">- unknown -</span>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>Subject</td>
+    <td><%= @case.subject %></td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td><%= @case.description %></td>
+  </tr>
+</table>
+  
+
+
+
+<% content_for :breadcrumbs do %>
+	<li><a href="#">Ticketing</a></li>
+	<li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
+  <li><%= link_to @case.case_queue.name, admin_ticketing_cases_path(case_queue_id: @case.case_queue_id) %></li>
+  <li>Case #<%= @case.id %></li>
+<% end %>
