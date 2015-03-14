@@ -1,7 +1,12 @@
+            <% max = TicketingCache.open_tickets_count %>
             <li class="<%= 'active' if request.original_url.include? 'admin/ticketing' %>">
-              <a href="#"><i class="fa fa-headphones fa-fw"></i> Ticketing  <span class="fa arrow"></span></a>
+              <a href="#"><i class="fa fa-headphones fa-fw"></i> Ticketing  
+                <% if max > 0 %>
+                &nbsp; &nbsp; <span class="badge"><%= max %></span>
+                <% end %>
+                <span class="fa arrow"></span></a>
               <ul class="nav nav-second-level">
-				<li><%= link_to "My Cases", admin_ticketing_cases_path %></li>
+				        <li><%= link_to "My Cases", admin_ticketing_cases_path %></li>
                 <li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
               </ul>
             </li>
