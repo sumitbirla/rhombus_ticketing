@@ -1,3 +1,4 @@
+<% msg = Mail.new(@case.raw_data) %>
 <h2>
   <div class="pull-right">
     <%= case_status_indicator(@case) %> 
@@ -19,6 +20,7 @@
     <td>Via</td>
     <td>
       <%= @case.received_via %> 
+      <%= link_to "raw data", raw_data_admin_ticketing_case_path(@case), class: "small" %>
     </td>
   </tr>
 </table>
@@ -54,12 +56,48 @@
   </tr>
   <tr>
     <td>Description</td>
-    <td><%= @case.description %></td>
+    <td><%= @case.description.gsub("\n", "<br>").html_safe %></td>
   </tr>
+  <% if @case.attachments > 0 %>
+  <tr>
+    <td>Attachments</td>
+    <td>
+      <% msg.attachments.each do |attachment| %>
+        <%= link_to attachment.filename, attachment_admin_ticketing_case_path(id: @case.id, filename: attachment.filename) %> &nbsp;  
+      <% end%>
+    </td>
+  </tr>
+  <% end %>
 </table>
+
+<% @case.updates.each do |update| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Panel title</h3>
+    </div>
+    <div class="panel-body">
+      <pre><%= update.inspect %></pre>
+    </div>
+  </div>
+<% end %>
+
+<% case_update = CaseUpdate.new(case_id: @case.id, user_id: current_user.id) %>
+<%= simple_form_for [:admin, :ticketing, case_update ], html: { class: 'form-inline hidden' } do |f| %>
+  <%= f.hidden_field :user_id %>
+  <%= f.hidden_field :case_id %>
+  <%= f.input :response %>
+  <%= f.input :private_note %>
+  <%= f.input :new_state, collection: Case.valid_states %>
+  <%= f.input :new_priority, collection: Case.valid_priorities %>
+  <%= f.input :new_assignee, collection: User.all %>
+  <%= f.submit %>
+<% end %>
   
 
 
+<% content_for :title do %>
+  Case #<%= @case.id %>
+<% end %>
 
 <% content_for :breadcrumbs do %>
 	<li><a href="#">Ticketing</a></li>

@@ -32,6 +32,14 @@ class Case < ActiveRecord::Base
 
   validates_presence_of :case_queue_id, :name, :subject, :priority, :status, :received_via
   validate :phone_or_email
+  
+  def self.valid_states
+    ['new', 'open', 'closed']
+  end
+  
+  def self.valid_priorities
+    ['normal', 'high', 'urgent']
+  end
 
   private
 

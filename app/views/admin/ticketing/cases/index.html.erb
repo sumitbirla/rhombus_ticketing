@@ -22,11 +22,11 @@
     <td><%= case_status_indicator c %></td>
     <td><%= case_priority_indicator c %></td>
     <td>
-          <% if c.user_id %>
-            <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
-          <% else %>
-            <%= c.email || c.phone %>
-          <% end %>
+      <% if c.user_id %>
+        <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
+      <% else %>
+        <%= c.email || c.phone %>
+      <% end %>
     </td>
 		<td>
       <%= c.subject %> 
@@ -67,6 +67,6 @@ end %>
     <% if q %>
         <li class="active"><%= q.name %></li>
     <% else %>
-        Cases
+        <li class="active">All Cases</li>
     <% end %>
 <% end %>

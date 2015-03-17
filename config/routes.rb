@@ -9,7 +9,14 @@ Rails.application.routes.draw do
       
     namespace :ticketing do
       resources :case_queues
-      resources :cases
+      resources :cases do
+        member do 
+          get "raw_data"
+          get "attachment"
+        end
+      end
+      resources :case_updates
+      
     end
     
   end

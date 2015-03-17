@@ -1,7 +1,7 @@
 class Admin::Ticketing::CasesController < Admin::BaseController
 
   def index
-    @cases = Case.page(params[:page]).order('name')
+    @cases = Case.page(params[:page]).order(id: :desc)
   end
 
   def new
@@ -43,6 +43,20 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     redirect_to action: 'index', notice: 'Case has been deleted.'
   end
   
+  def raw_data
+    @case = Case.find(params[:id])
+    send_data @case.raw_data, type: "text/plain", disposition: "inline"
+  end
+  
+  def attachment
+    @case = Case.find(params[:id])
+    attachment = Mail.new(@case.raw_data).attachments.find { |x| x.filename == params[:filename] }
+    unless attachment.nil?
+      send_data attachment.body.decoded, type: attachment.content_type
+    else
+      render :status => 404
+    end
+  end
   
   private
   

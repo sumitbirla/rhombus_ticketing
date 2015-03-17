@@ -20,29 +20,29 @@ namespace :rhombus_ticketing do
                                   :enable_ssl => q.pop3_use_ssl }
     	end
 
-      Mail.all.each do |mail|
+      Mail.find_and_delete(:what => :first, :count => 100, :order => :desc).each do |msg|
         
-        puts mail.date.to_s + ": " + mail.from.to_s + " => " + mail.to.to_s + " => " + mail.attachments.length.to_s
+        puts msg.date.to_s + ": " + msg.from.to_s + " => " + msg.to.to_s + " => " + msg.attachments.length.to_s
         
-        unless mail.multipart?
-          desc = mail.body.decoded
+        unless msg.multipart?
+          desc = msg.body.decoded
         else     
-          desc = mail.text_part.decoded
+          desc = msg.text_part.decoded
         end
         
         c = Case.new(case_queue_id: q.id,
                         priority: :normal,
                         status: :new,
                         assigned_to: q.initial_assignment,
-                        attachments: mail.attachments.length,
-                        name: mail[:from].display_names.first,
-                        email: mail.from[0],
-                        subject: mail.subject,
+                        attachments: msg.attachments.length,
+                        name: msg[:from].display_names.first,
+                        email: msg.from[0],
+                        subject: msg.subject,
                         description: desc,
                         received_via: :email,
-                        raw_data: mail.to_s)
+                        raw_data: msg.to_s)
         
-        user = User.find_by(email: mail.sender)   
+        user = User.find_by(email: msg.sender)   
         c.user_id = user.id unless user.nil?
         
                      
