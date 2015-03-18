@@ -14,7 +14,7 @@
   </tr>
   <tr>
     <td>Received</td>
-    <td><%= systime @case.created_at %></td>
+    <td><%= systime @case.received_at %>  &nbsp; <span class="light">(<%= time_ago_in_words(@case.received_at)%> ago)</span></td>
   </tr>
   <tr>
     <td>Via</td>
@@ -40,16 +40,12 @@
     <td>Email</td>
     <td><%= @case.email %></td>
   </tr>
+  <% unless @case.phone.blank? %>
   <tr>
     <td>Phone</td>
-    <td>
-      <% unless @case.phone.blank? %>
-        <%= @case.phone %>
-      <% else %>
-        <span class="light">- unknown -</span>
-      <% end %>
-    </td>
+    <td><%= @case.phone %></td>
   </tr>
+  <% end %>
   <tr>
     <td>Subject</td>
     <td><%= @case.subject %></td>
@@ -73,25 +69,63 @@
 <% @case.updates.each do |update| %>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Panel title</h3>
+      <span class="pull-right"><%= systime update.created_at %></span>
+      <h4 class="panel-title"><%= update.user %></h4>
     </div>
     <div class="panel-body">
-      <pre><%= update.inspect %></pre>
+      
+      <% unless update.response.blank? %>
+      <blockquote><%= update.response%></blockquote>
+      <% end %>
+      
+      <% unless update.private_note.blank? %>
+      <div class="bs-callout bs-callout-warning"><%= update.private_note %></div>
+      <% end %>
+      
+      <% unless update.new_state.blank? %>
+      <b>status&rarr;</b><%= update.new_state %> &nbsp; &nbsp; &nbsp; 
+      <% end %>
+      
+      <% unless update.new_priority.blank? %>
+      <b>priority&rarr;</b><%= update.new_priority %> &nbsp; &nbsp; &nbsp; 
+      <% end %>
+      
+      <% unless update.new_assignee.nil? %>
+      <b>reassigned&rarr;</b><%= User.find(update.new_assignee) %>
+      <% end %>
+      
     </div>
   </div>
 <% end %>
 
+
 <% case_update = CaseUpdate.new(case_id: @case.id, user_id: current_user.id) %>
-<%= simple_form_for [:admin, :ticketing, case_update ], html: { class: 'form-inline hidden' } do |f| %>
-  <%= f.hidden_field :user_id %>
-  <%= f.hidden_field :case_id %>
-  <%= f.input :response %>
-  <%= f.input :private_note %>
-  <%= f.input :new_state, collection: Case.valid_states %>
-  <%= f.input :new_priority, collection: Case.valid_priorities %>
-  <%= f.input :new_assignee, collection: User.all %>
-  <%= f.submit %>
+<%= form_for [:admin, :ticketing, case_update ] do |f| %>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    Your response:
+    <span class="pull-right"><i class="fa fa-user"></i> <%= current_user %></span>
+  </div>
+  <div class="panel-body">
+    <%= f.hidden_field :user_id %>
+    <%= f.hidden_field :case_id %>
+    <div class="row">
+      <div class="col-md-8"><%= f.text_area :response, rows: 8, style: "width: 100%", placeholder: "Response to customer..." %></div>
+      <div class="col-md-4"><%= f.text_area :private_note, rows: 5, style: "width: 100%; background-color: #FFF8DC;", placeholder: "Private note..." %></div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <%= f.select :new_state, Case.valid_states - [@case.status], prompt: "- change state -" %>
+    <%= f.select :new_priority, Case.valid_priorities - [@case.priority], prompt: "- change priority -" %>
+    <%= f.collection_select :new_assignee, User.all, :id, :name, prompt: "- assign to -" %>
+    <%= f.submit "Submit Update", class: "btn btn-primary pull-right" %>
+    <div style="clear: right;"></div>
+  </div>
+</div>
 <% end %>
+
+  
+
   
 
 

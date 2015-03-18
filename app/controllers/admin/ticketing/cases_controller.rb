@@ -1,7 +1,7 @@
 class Admin::Ticketing::CasesController < Admin::BaseController
 
   def index
-    @cases = Case.page(params[:page]).order(id: :desc)
+    @cases = Case.page(params[:page]).order(received_at: :desc)
   end
 
   def new
@@ -61,8 +61,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   private
   
     def case_params
-      params.require(:case).permit(:case_queue_id, :user_id, :name, :subject, :assigned_to, :priority, :status,
-                                   :phone, :email, :description, :received_via) #, :form_data)
+      params.require(:case).permit!
     end
   
 end
