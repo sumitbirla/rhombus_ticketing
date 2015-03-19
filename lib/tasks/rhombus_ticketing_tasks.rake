@@ -48,7 +48,6 @@ namespace :rhombus_ticketing do
                         description: desc,
                         received_via: :email,
                         raw_data: msg.to_s )
-            end
           end
                       
           user = User.find_by(email: msg.sender)   
