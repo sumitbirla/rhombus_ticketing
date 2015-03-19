@@ -1,11 +1,9 @@
-<% msg = Mail.new(@case.raw_data) %>
 <h2>
   <div class="pull-right">
     <%= case_status_indicator(@case) %> 
     <%= case_priority_indicator(@case)%>
   </div>
   Case #<%= @case.id %></h2>
-<b>Submitted: </b> <%= time_ago_in_words(@case.created_at) %> ago
 
 <table class="table summary table-condensed table-bordered">
   <tr>
@@ -54,12 +52,12 @@
     <td>Description</td>
     <td><%= @case.description.gsub("\n", "<br>").html_safe %></td>
   </tr>
-  <% if @case.attachments > 0 %>
+  <% unless @case.attachments.blank? %>
   <tr>
     <td>Attachments</td>
     <td>
-      <% msg.attachments.each do |attachment| %>
-        <%= link_to attachment.filename, attachment_admin_ticketing_case_path(id: @case.id, filename: attachment.filename) %> &nbsp;  
+      <% @case.attachments.split("|").each do |filename| %>
+        <%= link_to filename, attachment_admin_ticketing_case_path(id: @case.id, filename: filename) %> &nbsp;  
       <% end%>
     </td>
   </tr>
@@ -69,13 +67,13 @@
 <% @case.updates.each do |update| %>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <span class="pull-right"><%= systime update.created_at %></span>
-      <h4 class="panel-title"><%= update.user %></h4>
+      <span class="pull-right"><%= systime update.received_at %></span>
+      <h4 class="panel-title"><%= update.user || update.case.name %></h4>
     </div>
     <div class="panel-body">
       
       <% unless update.response.blank? %>
-      <blockquote><%= update.response%></blockquote>
+      <blockquote><%= update.response.gsub("\n", "<br>").html_safe %></blockquote>
       <% end %>
       
       <% unless update.private_note.blank? %>
@@ -94,6 +92,16 @@
       <b>reassigned&rarr;</b><%= User.find(update.new_assignee) %>
       <% end %>
       
+      <div class="pull-right light">
+        <% unless update.attachments.blank? %>
+          <% update.attachments.split("|").each do |filename| %>
+            <%= link_to filename, attachment_admin_ticketing_case_update_path(id: update.id, filename: filename), class: "small" %> &nbsp;  
+          <% end%>
+        <% end %>
+        <% unless update.raw_data.blank? %>
+          <%= link_to "raw data", raw_data_admin_ticketing_case_update_path(update), class: "small" %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

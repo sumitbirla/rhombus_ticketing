@@ -15,7 +15,12 @@ Rails.application.routes.draw do
           get "attachment"
         end
       end
-      resources :case_updates
+      resources :case_updates do 
+        member do 
+          get "raw_data"
+          get "attachment"
+        end
+      end
       
     end
     

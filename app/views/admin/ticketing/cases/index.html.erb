@@ -34,7 +34,7 @@
 		</td>
 		<td>
       <%= c.subject %> 
-      <% if c.attachments > 0 %>
+      <% unless c.attachments.blank? %>
         <i class="fa fa-paperclip"></i>
       <% end %>
     </td>
