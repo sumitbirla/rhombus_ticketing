@@ -57,15 +57,15 @@ namespace :rhombus_ticketing do
             mail.delete
             
             # send notofication email
-            #begin
+            begin
               if c.class.name == "CaseUpdate" 
                 CaseMailer.updated(c).deliver
               else
                 CaseMailer.assigned(c).deliver
               end
-              #rescue => e
-            #  puts e.message
-            #end
+            rescue => e
+              puts e.message
+            end
             
           else
             puts c.errors.inspect
