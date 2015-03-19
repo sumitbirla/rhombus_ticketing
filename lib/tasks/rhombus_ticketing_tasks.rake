@@ -27,8 +27,7 @@ namespace :rhombus_ticketing do
           end
                
           m = /Case :::\d{5}:::/.match(desc) 
-          puts m.inspect
-                
+             
           if m && m.length > 0
             case_id = m[0].gsub("Case ", "").gsub(":::", "").to_i
             c = CaseUpdate.new(case_id: case_id,
@@ -36,11 +35,6 @@ namespace :rhombus_ticketing do
                                attachments: msg.attachments.map { |x| x.filename }.join("|"),
                                raw_data: msg.to_s,
                                response: desc )
-           begin 
-             CaseMailer.updated(c).deliver
-           rescue => e
-             puts e.message
-           end
           else
             c = Case.new( case_queue_id: q.id,
                         received_at: msg.date,
@@ -54,11 +48,6 @@ namespace :rhombus_ticketing do
                         description: desc,
                         received_via: :email,
                         raw_data: msg.to_s )
-            
-            begin 
-              CaseMailer.assigned(c).deliver
-            rescue => e
-              puts e.message
             end
           end
                       
@@ -67,6 +56,18 @@ namespace :rhombus_ticketing do
           
           if c.save
             mail.delete
+            
+            # send notofication email
+            begin
+              if c.class.name == "CaseUpdate" 
+                CaseMailer.updated(c).deliver
+              else
+                CaseMailer.assigned(c).deliver
+              end
+            rescue => e
+              puts e.message
+            end
+            
           else
             puts c.errors.inspect
           end

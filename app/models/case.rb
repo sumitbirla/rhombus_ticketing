@@ -27,7 +27,7 @@ class Case < ActiveRecord::Base
   belongs_to :case_queue
   belongs_to :user
   has_many :details, class_name: 'CaseDetail'
-  has_many :updates, class_name: 'CaseUpdate'
+  has_many :updates, class_name: 'CaseUpdate', dependent: :destroy
   belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
 
   validates_presence_of :case_queue_id, :name, :subject, :priority, :status, :received_via
