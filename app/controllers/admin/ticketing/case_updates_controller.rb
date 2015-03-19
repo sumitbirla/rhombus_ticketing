@@ -10,7 +10,7 @@ class Admin::Ticketing::CaseUpdatesController < ApplicationController
       
       unless @case_update.new_assignee.nil?
         @case_update.case.update_attribute(:assigned_to, @case_update.new_assignee)
-        CaseMailer.assigned(@case_update.case)
+        CaseMailer.assigned(@case_update.case).deliver
       end
       
       unless @case_update.response.blank?
