@@ -36,7 +36,11 @@ namespace :rhombus_ticketing do
                                attachments: msg.attachments.map { |x| x.filename }.join("|"),
                                raw_data: msg.to_s,
                                response: desc )
-            # send email
+           begin 
+             CaseMailer.updated(c).deliver
+           rescue => e
+             puts e.message
+           end
           else
             c = Case.new( case_queue_id: q.id,
                         received_at: msg.date,
@@ -50,7 +54,12 @@ namespace :rhombus_ticketing do
                         description: desc,
                         received_via: :email,
                         raw_data: msg.to_s )
-            # send email
+            
+            begin 
+              CaseMailer.assigned(c).deliver
+            rescue => e
+              puts e.message
+            end
           end
                       
           user = User.find_by(email: msg.sender)   
