@@ -29,7 +29,7 @@ namespace :rhombus_ticketing do
           m = /case:::\d{5}:::/.match(desc) 
              
           if m && m.length > 0
-            case_id = m[0].gsub("Case ", "").gsub(":::", "").to_i
+            case_id = m[0].gsub("case", "").gsub(":::", "").to_i
             c = CaseUpdate.new(case_id: case_id,
                                received_at: msg.date,
                                attachments: msg.attachments.map { |x| x.filename }.join("|"),
@@ -57,15 +57,15 @@ namespace :rhombus_ticketing do
             mail.delete
             
             # send notofication email
-            begin
+            #begin
               if c.class.name == "CaseUpdate" 
                 CaseMailer.updated(c).deliver
               else
                 CaseMailer.assigned(c).deliver
               end
-            rescue => e
-              puts e.message
-            end
+              #rescue => e
+            #  puts e.message
+            #end
             
           else
             puts c.errors.inspect
