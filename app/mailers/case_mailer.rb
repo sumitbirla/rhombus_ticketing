@@ -19,32 +19,32 @@ class CaseMailer < ApplicationMailer
          )
   end
   
-  def assigned(case)
-    @case = case
-    headers["X-Rhombus-Case-ID"] = case_update.case.id
+  def assigned(c)
+    @case = c
+    headers["X-Rhombus-Case-ID"] = @case.id
     
     options = {
         address: Cache.setting(Rails.configuration.domain_id, :system, 'SMTP Server'),
         openssl_verify_mode: 'none'
     }
-    mail(from: "#{case.case_queue.reply_name} <#{case.case_queue.reply_email}>",
-         to: User.find(case.assigned_to).email,
-         subject: "Case ##{case.id} has been assigned to you",
+    mail(from: "#{@case.case_queue.reply_name} <#{@case.case_queue.reply_email}>",
+         to: User.find(@case.assigned_to).email,
+         subject: "Case ##{@case.id} has been assigned to you",
          delivery_method_options: options
          )
   end
   
-  def updated(case)
-    @case = case
-    headers["X-Rhombus-Case-ID"] = case_update.case.id
+  def updated(c)
+    @case = c
+    headers["X-Rhombus-Case-ID"] = @case.id
   
     options = {
         address: Cache.setting(Rails.configuration.domain_id, :system, 'SMTP Server'),
         openssl_verify_mode: 'none'
     }
-    mail(from: "#{case.case_queue.reply_name} <#{case.case_queue.reply_email}>",
-         to: User.find(case.assigned_to).email,
-         subject: "Case ##{case.id} has an update",
+    mail(from: "#{@case.case_queue.reply_name} <#{@case.case_queue.reply_email}>",
+         to: User.find(@case.assigned_to).email,
+         subject: "Case ##{@case.id} has an update",
          delivery_method_options: options
          )
   end
