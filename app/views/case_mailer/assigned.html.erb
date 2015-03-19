@@ -14,13 +14,12 @@
           <h1 style="font-size: 36px; line-height: 1.2; font-weight: 200; margin: 0; text-align: center;">Case #<%= @case.id %> has been assigned to you</h1>
           <p style="text-align: center; color: #999; margin: 4px 0 20px 0;">Received @ <%= @case.received_at.strftime("%d %b %Y %l:%M %p") %> EST</p>
 
-          <blockquote style="margin-bottom: 30px;"><%= @case.description %></blockquote>
+          <p style="margin-bottom: 30px; font-style: italic"><%= @case.description.gsub("\n", "<br>").html_safe %></p>
 
           <p>
             <a href="<%= Cache.setting(Rails.configuration.domain_id, :system, "Website URL") %>/admin/ticketing/cases/<%= @case.id %>" style="font-size: 100%; line-height: 2; color: #FFF; text-decoration: none; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 25px; background-color: #348eda; margin: 20px 10px 0 0; padding: 0; border-color: #348eda; border-style: solid; border-width: 10px 20px;">Click here to respond</a>
           </p>
-          
-          
+
     		</td>
     	</tr>
     </table>
