@@ -10,14 +10,18 @@ class Admin::Ticketing::CaseUpdatesController < ApplicationController
       
       unless @case_update.new_assignee.nil?
         @case_update.case.update_attribute(:assigned_to, @case_update.new_assignee)
-        CaseMailer.assigned(@case_update.case).deliver
+        begin
+          CaseMailer.assigned(@case_update.case).deliver
+        rescue => e
+          flash[:error] = "Error sending email to assignee: " + e.message
+        end
       end
       
       unless @case_update.response.blank?
         begin
           CaseMailer.response(@case_update).deliver
         rescue => e
-          flash[:error] = "Error sending email: " + e.message
+          flash[:error] = "Error sending email to customer: " + e.message
         end
       end
       
