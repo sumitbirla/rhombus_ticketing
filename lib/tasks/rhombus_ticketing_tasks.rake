@@ -26,7 +26,7 @@ namespace :rhombus_ticketing do
             desc = msg.text_part.decoded
           end
                
-          m = /Case :::\d{5}:::/.match(desc) 
+          m = /case:::\d{5}:::/.match(desc) 
              
           if m && m.length > 0
             case_id = m[0].gsub("Case ", "").gsub(":::", "").to_i
