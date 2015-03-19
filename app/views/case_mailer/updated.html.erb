@@ -16,7 +16,7 @@
       <tr>
     		<td style="background-color: white; padding: 20px; border: 1px solid #f0f0f0;">
           <p style="text-align: center; color: #999; margin: 0 0 20px 0;">Received @ <%= @case.received_at.strftime("%d %b %Y %l:%M %p") %> EST</p>
-          <p style="margin-bottom: 20px;>Subject: <%= @case_update.subject %></p>
+          <p style="margin-bottom: 20px;">Subject: <%= @case_update.subject %></p>
           <p style="margin-bottom: 30px; font-style: italic"><%= @case_update.response.gsub("\n", "<br>").html_safe %></p>
           <p style="text-align: center;">
             <a href="<%= @reset_url %>" style="font-size: 100%; line-height: 2; color: #FFF; text-decoration: none; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 25px; background-color: #348eda; margin: 20px 10px 0 0; padding: 0; border-color: #348eda; border-style: solid; border-width: 10px 20px;">Click here to respond</a>
