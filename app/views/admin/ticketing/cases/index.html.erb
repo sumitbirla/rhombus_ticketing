@@ -1,7 +1,8 @@
 <h2>
 	<%= link_to "new case", new_admin_ticketing_case_path(queue_id: params[:queue_id]), class: 'btn btn-sm btn-default pull-right'%>
-    <%= q = CaseQueue.find(params[:queue_id]) unless params[:queue_id].nil? %>
+  <%= q = CaseQueue.find(params[:queue_id]) unless params[:queue_id].nil? %>
   Cases
+  <%= " assigned to " + User.find(params[:user_id]).name unless params[:user_id].nil? %>
 </h2>
 
 <table class="table table-striped table-condensed">

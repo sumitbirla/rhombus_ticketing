@@ -22,7 +22,7 @@
 class Case < ActiveRecord::Base
   self.table_name = "crm_cases"
   
-  scope :open, -> { where(status: 'open') }
+  scope :open, -> { where(status: ['new', 'open']) }
   
   belongs_to :case_queue
   belongs_to :user

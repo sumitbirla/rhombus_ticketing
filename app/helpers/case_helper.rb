@@ -3,11 +3,11 @@ module CaseHelper
   def case_status_indicator(c)
 
     if c.status == 'new'
-      css_class = 'label-danger'
+      css_class = 'label-info'
     elsif c.status == 'open'
       css_class = 'label-success'
     elsif c.status == 'closed'
-      css_class = 'label-info'
+      css_class = 'label-danger'
     else
       css_class = 'label-default'
     end
@@ -18,11 +18,11 @@ module CaseHelper
   def case_priority_indicator(c)
 
     if c.priority == 'high'
-      css_class = 'label-danger'
-    elsif c.priority == 'normal'
-      css_class = 'label-success'
-    elsif c.priority == 'low'
       css_class = 'label-warning'
+    elsif c.priority == 'normal'
+      css_class = 'label-default'
+    elsif c.priority == 'urgent'
+      css_class = 'label-danger'
     else
       css_class = 'label-default'
     end

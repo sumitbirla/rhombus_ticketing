@@ -2,6 +2,8 @@ class Admin::Ticketing::CasesController < Admin::BaseController
 
   def index
     @cases = Case.page(params[:page]).order(received_at: :desc)
+    @cases = @cases.where(case_queue_id: params[:queue_id]) unless params[:queue_id].blank?
+    @cases = @cases.where(assigned_to: params[:user_id]) unless params[:user_id].blank?
   end
 
   def new

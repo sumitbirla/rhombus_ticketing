@@ -6,7 +6,7 @@
                 <% end %>
                 <span class="fa arrow"></span></a>
               <ul class="nav nav-second-level">
-				        <li><%= link_to "My Cases", admin_ticketing_cases_path %></li>
+				        <li><%= link_to "My Cases", admin_ticketing_cases_path(user_id: session[:user_id]) %></li>
                 <li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
               </ul>
             </li>

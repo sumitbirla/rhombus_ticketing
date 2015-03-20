@@ -6,20 +6,21 @@
 		<th>Name</th>
 		<th>Notification</th>
 		<th>Initial assignment</th>
-		<th>Open cases</th>
+		<th class="calign">Open cases</th>
 		<th>&nbsp;</th>
 	</tr>
 	<% @case_queues.each do |queue| %>
 	<tr>
 		<td><%= link_to queue.name, admin_ticketing_cases_path(queue_id: queue.id) %></td>
 		<td><%= queue.notify_email %></td>
-		<td><% unless queue.initial_assignment.nil? %>
+		<td>
+    <% unless queue.initial_assignment.nil? %>
 			<%= link_to queue.assigned %>
-			<% else %>
+		<% else %>
 			- none -
-			<% end%>
+		<% end%>
 		</td>
-		<td><%= queue.cases.open.length %></td>
+		<td class="calign"><%= queue.cases.open.length %></td>
 		<td>
 			<%= link_to "cases", admin_ticketing_cases_path(queue_id: queue.id) %> &nbsp;
 			<%= link_to "configure", edit_admin_ticketing_case_queue_path(queue) %> &nbsp;
