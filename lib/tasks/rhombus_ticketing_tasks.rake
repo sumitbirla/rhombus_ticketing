@@ -65,7 +65,7 @@ namespace :rhombus_ticketing do
                 logger.info "Case ##{c.case.id} received an update"
                 CaseMailer.updated(c).deliver
               else
-                logger.info "Case ##{c.case.id} created"
+                logger.info "Case ##{c.id} created"
                 CaseMailer.assigned(c).deliver
               end
             rescue => e
