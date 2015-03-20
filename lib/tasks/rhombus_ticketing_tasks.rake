@@ -13,6 +13,7 @@ namespace :rhombus_ticketing do
     
     CaseQueue.where(pop3_enabled: true).each do |q|
           
+      Net::POP3.enable_ssl(OpenSSL::SSL::VERIFY_NONE) if q.pop3_use_ssl
       Net::POP3.start(q.pop3_host, q.pop3_port, q.pop3_login, q.pop3_password) do |pop|
 
         pop.each_mail do |mail|
