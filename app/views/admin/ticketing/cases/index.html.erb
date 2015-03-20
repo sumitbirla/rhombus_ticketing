@@ -10,16 +10,15 @@
     <th>ID</th>
     <th>Received</th>
     <th>From</th>
-    <th>Assigned to</th>
     <th>Subject</th>
     <th>Status</th>
     <th>Priority</th>
-		<th>&nbsp;</th>
+    <th>Assigned to</th>
 	</tr>
 	<% @cases.each do |c| %>
-	<tr>
+	<tr class="<%= "light" if c.status == "closed" %>">
 		<td><%= link_to c.id, admin_ticketing_case_path(c) %></td>
-    <td class="light" nowrap><%= systime c.received_at %></td>
+    <td nowrap><%= systime c.received_at %></td>
     <td>
       <% if c.user_id %>
         <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
@@ -27,12 +26,6 @@
         <%= c.name %>
       <% end %>
     </td>
-		<td><% unless c.assigned_to.nil? %>
-			<%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
-			<% else %>
-			- none -
-			<% end%>
-		</td>
 		<td>
       <%= c.subject %> 
       <% unless c.attachments.blank? %>
@@ -41,11 +34,11 @@
     </td>
     <td><%= case_status_indicator c %></td>
     <td><%= case_priority_indicator c %></td>
-		<td>
-			<%= link_to "delete", 
-						  { action: "destroy", id: c.id }, 
-						  method: :delete, 
-						  data: { confirm: "Are you sure?" } %>
+		<td><% unless c.assigned_to.nil? %>
+			<%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
+			<% else %>
+			- none -
+			<% end%>
 		</td>
 	</tr>
 	<% end %>
