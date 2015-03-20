@@ -10,6 +10,8 @@ namespace :rhombus_ticketing do
   
   desc "TODO"
   task process_inbox: :environment do
+  
+    logger = Logger.new("/var/log/crm.log")
     
     CaseQueue.where(pop3_enabled: true).each do |q|
           
@@ -19,7 +21,7 @@ namespace :rhombus_ticketing do
         pop.each_mail do |mail|
           msg = Mail.new(mail.pop)
           
-          puts msg.date.to_s + ": " + msg.from.to_s + " => " + msg.to.to_s + " => " + msg.attachments.length.to_s
+          logger.debug msg.from.to_s + " => " + msg.to.to_s + "[#{msg.subject}]"
         
           unless msg.multipart?
             desc = msg.body.decoded
@@ -60,16 +62,16 @@ namespace :rhombus_ticketing do
             # send notofication email
             begin
               if c.class.name == "CaseUpdate" 
+                logger.info "Case ##{c.case.id} received an update"
                 CaseMailer.updated(c).deliver
               else
+                logger.info "Case ##{c.case.id} created"
                 CaseMailer.assigned(c).deliver
               end
             rescue => e
-              puts e.message
+              logger.error e
             end
-            
-          else
-            puts c.errors.inspect
+          
           end
           
         end
