@@ -74,12 +74,12 @@
       <% unless update.response.blank? %>
         <%= update.response.gsub("\n", "<br>").html_safe %>
       <% end %>
+      
+      <% unless update.private_note.blank? %>
+        <div class="bs-callout bs-callout-warning"><%= update.private_note %></div>
+      <% end %>
     </div>
     <div class="panel-footer">
-      <% unless update.private_note.blank? %>
-      <div class="bs-callout bs-callout-warning"><%= update.private_note %></div>
-      <% end %>
-    
       <% unless update.new_state.blank? %>
       <b>status&rarr;</b><%= update.new_state %> &nbsp; &nbsp; &nbsp; 
       <% end %>
