@@ -18,6 +18,7 @@ class CasesController < ApplicationController
     )
     
     if @case.save
+      CaseMailer.assigned(@case).deliver_later
       redirect_to action: 'show', id: @case.id
     else
       render 'new'
