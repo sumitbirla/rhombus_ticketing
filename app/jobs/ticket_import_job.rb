@@ -1,3 +1,6 @@
+require 'net/pop'
+
+
 class TicketImportJob < ActiveJob::Base
   queue_as :low_priority
   
