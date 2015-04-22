@@ -21,11 +21,27 @@ class TicketImportJob < ActiveJob::Base
         pop.each_mail do |mail|
           msg = Mail.new(mail.pop)
           @logger.debug msg.from.to_s + " => " + msg.to.to_s + "[#{msg.subject}]"
-          process_message(q, msg)
-        end
-      end
+          
+          # delete mail if successfully processed and notify
+          if process_message(q, msg)  
+            mail.delete
+            begin
+              if c.class.name == "CaseUpdate" 
+                @logger.info "Case ##{c.case.id} received an update"
+                CaseMailer.updated(c).deliver_now
+              else
+                @logger.info "Case ##{c.id} created"
+                CaseMailer.assigned(c).deliver_now
+              end
+            rescue => e
+              @logger.error e
+            end
+          end
+          
+        end  # each mail
+      end  # each pop
     
-    end
+    end  # each queue
   end
   
   
@@ -63,23 +79,7 @@ class TicketImportJob < ActiveJob::Base
                 
     user = User.find_by(email: msg.sender)   
     c.user_id = user.id unless user.nil?
-    
-    if c.save
-      mail.delete
-      
-      begin
-        if c.class.name == "CaseUpdate" 
-          @logger.info "Case ##{c.case.id} received an update"
-          CaseMailer.updated(c).deliver
-        else
-          @logger.info "Case ##{c.id} created"
-          CaseMailer.assigned(c).deliver
-        end
-      rescue => e
-        @logger.error e
-      end
-    end
-    
+    c.save  # return true or false indicating success or failure
   end
   
 end
