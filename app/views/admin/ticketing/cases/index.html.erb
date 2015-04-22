@@ -46,7 +46,7 @@
         <% end %>
       </td>
   		<td>
-        <%= c.subject %> 
+        <%= truncate c.subject, length: 40 %>
         <% unless c.attachments.blank? %>
           <i class="fa fa-paperclip"></i>
         <% end %>
