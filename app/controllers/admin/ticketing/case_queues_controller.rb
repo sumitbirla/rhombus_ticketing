@@ -13,6 +13,7 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
     @case_queue = CaseQueue.new(case_queue_params)
     
     if @case_queue.save
+      Rails.cache.delete :case_queue_list
       redirect_to action: 'index', notice: 'Case Queue was successfully created.'
     else
       render 'edit'
@@ -31,6 +32,7 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
     @case_queue = CaseQueue.find(params[:id])
     
     if @case_queue.update(case_queue_params)
+      Rails.cache.delete :case_queue_list
       redirect_to action: 'index', notice: 'Case Queue was successfully updated.'
     else
       render 'edit'
@@ -40,6 +42,8 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   def destroy
     @case_queue = CaseQueue.find(params[:id])
     @case_queue.destroy
+    
+    Rails.cache.delete :case_queue_list
     redirect_to action: 'index', notice: 'Case Queue has been deleted.'
   end
   

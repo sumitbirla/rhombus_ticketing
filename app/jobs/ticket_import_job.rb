@@ -2,7 +2,7 @@ require 'net/pop'
 
 
 class TicketImportJob < ActiveJob::Base
-  queue_as :low_priority
+  queue_as :default
   
   # reschedule job
   after_perform do |job|

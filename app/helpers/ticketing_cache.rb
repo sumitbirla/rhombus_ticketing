@@ -6,4 +6,10 @@ module TicketingCache
     end
   end
   
+  def self.queue_list
+    Rails.cache.fetch(:case_queue_list) do 
+      CaseQueue.order(:name).all
+    end
+  end
+  
 end

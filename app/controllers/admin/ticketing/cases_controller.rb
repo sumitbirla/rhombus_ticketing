@@ -1,4 +1,5 @@
 class Admin::Ticketing::CasesController < Admin::BaseController
+  include ActionView::Helpers::TextHelper
 
   def index
     @cases = Case.page(params[:page]).order(received_at: :desc)
@@ -59,6 +60,28 @@ class Admin::Ticketing::CasesController < Admin::BaseController
       render :status => 404
     end
   end
+  
+  def update_status
+    count = 0 
+    
+    Case.where(id: params[:case_id]).each do |c|
+      next if c.status == params[:status]
+      
+      c.update_attribute(:status, params[:status])
+      CaseUpdate.create(case_id: c.id, received_at: DateTime.now, user_id: session[:user_id], new_state: params[:status], response: "")
+      count += 1
+    end
+    
+    flash[:success] = "Status of #{pluralize(count, "case")} updated to '#{params[:status]}'."
+    redirect_to :back
+  end
+  
+  def delete_batch
+    list = Case.destroy_all(id: params[:case_id])
+    flash[:success] = "#{pluralize(list.length, "case")} deleted."
+    redirect_to :back
+  end
+  
   
   private
   

@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   namespace :admin do
       
     namespace :ticketing do
+      
+      post "cases_update_status" => "cases#update_status" 
+      post "cases_delete_batch" => "cases#delete_batch"
+      
       resources :case_queues
       resources :cases do
         member do 

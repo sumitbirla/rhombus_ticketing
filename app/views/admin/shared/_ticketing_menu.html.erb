@@ -7,6 +7,8 @@
                 <span class="fa arrow"></span></a>
               <ul class="nav nav-second-level">
 				        <li><%= link_to "My Cases", admin_ticketing_cases_path(user_id: session[:user_id]) %></li>
-                <li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
+                <% TicketingCache.queue_list.each do |q| %>
+                <li><%= link_to q.name, admin_ticketing_cases_path(queue_id: q.id) %></li>
+                <% end %>
               </ul>
             </li>
