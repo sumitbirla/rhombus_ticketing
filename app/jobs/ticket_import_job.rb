@@ -15,38 +15,22 @@ class TicketImportJob < ActiveJob::Base
     @logger = Logger.new(Rails.root.join("log", "crm.log"))
       
     CaseQueue.where(pop3_enabled: true).each do |q|
+      
       Net::POP3.enable_ssl(OpenSSL::SSL::VERIFY_NONE) if q.pop3_use_ssl
     
       Net::POP3.start(q.pop3_host, q.pop3_port, q.pop3_login, q.pop3_password) do |pop|
-        pop.each_mail do |mail|
-          msg = Mail.new(mail.pop)
-          @logger.debug msg.from.to_s + " => " + msg.to.to_s + "[#{msg.subject}]"
-          
-          # delete mail if successfully processed and notify
-          if process_message(q, msg)  
-            mail.delete
-            begin
-              if c.class.name == "CaseUpdate" 
-                @logger.info "Case ##{c.case.id} received an update"
-                CaseMailer.updated(c).deliver_now
-              else
-                @logger.info "Case ##{c.id} created"
-                CaseMailer.assigned(c).deliver_now
-              end
-            rescue => e
-              @logger.error e
-            end
-          end
-          
-        end  # each mail
-      end  # each pop
+        pop.each_mail { |mail| process_message(q, mail) } 
+      end  
     
     end  # each queue
   end
   
   
   # Parse single email message and put in database
-  def process_message(q, msg)
+  def process_message(q, mail)
+    msg = Mail.new(mail.pop)
+    @logger.debug msg.from.to_s + " => " + msg.to.to_s + "[#{msg.subject}]"
+    
     unless msg.multipart?
       desc = msg.body.decoded
     else     
@@ -79,7 +63,19 @@ class TicketImportJob < ActiveJob::Base
                 
     user = User.find_by(email: msg.sender)   
     c.user_id = user.id unless user.nil?
-    c.save  # return true or false indicating success or failure
+    
+    if c.save
+      mail.delete
+
+      if c.class.name == "CaseUpdate" 
+        @logger.info "Case ##{c.case.id} received an update"
+        CaseMailer.updated(c).deliver_later
+      else
+        @logger.info "Case ##{c.id} created"
+        CaseMailer.assigned(c).deliver_later
+      end
+    end
+    
   end
   
 end
