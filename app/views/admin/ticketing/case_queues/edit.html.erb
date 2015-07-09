@@ -1,12 +1,7 @@
-<style>
-    .form-inline .control-label { width: 120px; }
-    .form-inline .panel .form-group { margin: 10px; }
-</style>
-
 <h2><%= @case_queue.name %></h2>
 <hr/>
 
-<%= simple_form_for([:admin, :ticketing, @case_queue], html: { class: 'form-inline' }) do |f| %>
+<%= simple_form_for [:admin, :ticketing, @case_queue], html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f| %>
 
   <%= render 'admin/shared/error_messages', object: f.object %>
 
@@ -34,9 +29,8 @@
     </div>
   </div>
   
-  <div class="form-actions">
-  	<%= f.button :submit %>
-  </div>
+  <%= f.button :submit %>
+
 <% end %>
 
 

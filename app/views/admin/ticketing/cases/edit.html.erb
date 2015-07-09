@@ -1,11 +1,7 @@
-<style>
-    .form-inline .control-label { width: 120px; }
-</style>
-
 <h2>New Case</h2>
 <hr/>
 
-<%= simple_form_for([:admin, :ticketing, @case], html: { class: 'form-inline' }) do |f| %>
+<%= simple_form_for [:admin, :ticketing, @case], html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f| %>
 
     <%= render 'admin/shared/error_messages', object: f.object %>
 
