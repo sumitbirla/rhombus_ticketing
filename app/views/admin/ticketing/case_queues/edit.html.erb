@@ -1,7 +1,7 @@
 <h2><%= @case_queue.name %></h2>
 <hr/>
 
-<%= simple_form_for [:admin, :ticketing, @case_queue], html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f| %>
+<%= simple_form_for [:admin, :ticketing, @case_queue] do |f| %>
 
   <%= render 'admin/shared/error_messages', object: f.object %>
 
