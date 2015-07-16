@@ -1,20 +1,22 @@
 # == Schema Information
 #
-# Table name: cases
+# Table name: crm_cases
 #
 #  id            :integer          not null, primary key
 #  case_queue_id :integer          not null
+#  received_at   :datetime         not null
 #  priority      :string(255)      not null
 #  status        :string(255)      not null
 #  assigned_to   :integer
+#  attachments   :string(255)      default("0"), not null
 #  user_id       :integer
 #  name          :string(255)      not null
 #  email         :string(255)
 #  phone         :string(255)
 #  subject       :string(255)      not null
-#  description   :text
+#  description   :text(65535)
 #  received_via  :string(255)      not null
-#  form_data     :text
+#  raw_data      :text(4294967295)
 #  created_at    :datetime
 #  updated_at    :datetime
 #

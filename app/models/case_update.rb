@@ -1,14 +1,18 @@
 # == Schema Information
 #
-# Table name: case_updates
+# Table name: crm_case_updates
 #
 #  id           :integer          not null, primary key
 #  case_id      :integer
-#  user_id      :integer          not null
-#  response     :text             not null
-#  data         :binary
-#  private_note :text
-#  state_update :boolean          not null
+#  received_at  :datetime         not null
+#  user_id      :integer
+#  response     :text(65535)      not null
+#  attachments  :string(255)
+#  raw_data     :text(4294967295)
+#  private_note :text(65535)
+#  new_state    :string(32)       default("")
+#  new_priority :string(32)
+#  new_assignee :integer
 #  created_at   :datetime
 #  updated_at   :datetime
 #
