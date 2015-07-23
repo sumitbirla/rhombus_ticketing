@@ -1,12 +1,12 @@
 # == Schema Information
 #
-# Table name: case_details
+# Table name: crm_case_details
 #
 #  id         :integer          not null, primary key
 #  case_id    :integer          not null
 #  sort       :integer          not null
 #  key        :string(255)      not null
-#  value      :text             not null
+#  value      :text(65535)      not null
 #  created_at :datetime
 #  updated_at :datetime
 #
