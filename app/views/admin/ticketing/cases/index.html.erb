@@ -39,7 +39,7 @@
   		<td><%= link_to c.id, admin_ticketing_case_path(c) %></td>
       <td nowrap><%= systime c.received_at %></td>
       <td>
-        <% if c.user_id %>
+        <% if c.user %>
           <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
         <% else %>
           <%= c.name %>
