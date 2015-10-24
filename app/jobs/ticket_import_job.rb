@@ -46,6 +46,11 @@ class TicketImportJob < ActiveJob::Base
                          attachments: msg.attachments.map { |x| x.filename }.join("|"),
                          raw_data: msg.to_s,
                          response: desc )
+                         
+      # reopen case in case it was closed
+      c1 = Case.find(case_id)
+      c1.update_attribute(:status, "open") unless c1.nil?
+      
     else
       c = Case.new( case_queue_id: q.id,
                   received_at: msg.date,

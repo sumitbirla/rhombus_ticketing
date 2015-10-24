@@ -1,8 +1,8 @@
 <div class="pull-right">
+  
   <select id="selAction" class="form-control" style="display: inline; width: 75%">
     <option> - - Select Action - - </option>
 	  <option method="get" value="/admin/ticketing/case/new?queue_id=<%= params[:queue_id]%>">New Ticket</option>
-    <option method="get" value="/admin/ticketing/case_queues">Configure Queues</option>
     <option method="post" value="/admin/ticketing/cases_delete_batch">Delete Selected</option>
     <optgroup label="Change case status to ">
         <option method="post" value="/admin/ticketing/cases_update_status?status=new">New</option>
@@ -10,14 +10,37 @@
         <option method="post" value="/admin/ticketing/cases_update_status?status=closed">Closed</option>
     </optgroup>
   </select>
-  <input type="button" class="btn btn-default btn-small" id="btnAction" value="Go" />	  
+  <input type="button" class="btn btn-default btn-small" id="btnAction" value="Go" />
+
 </div>
 
 <h2>
-  <%= q = CaseQueue.find(params[:queue_id]) unless params[:queue_id].nil? %>
-  Cases
+  <i class="fa fa-headphones"></i> 
+  <%= params[:status].titlecase unless params[:status].blank? %> Cases
   <%= " assigned to " + User.find(params[:user_id]).name unless params[:user_id].nil? %>
+  <select id="selQueue">
+      <% CaseQueue.all.each do |q| %>
+  	  <option <%= "selected" if q.id.to_s == params[:queue_id] %> value="<%= admin_ticketing_cases_path(status: params[:status], queue_id: q.id, user_id: params[:user_id])%>"><%= q.name %></option>
+      <% end %>
+  </select>
 </h2>
+
+<hr>
+ 
+
+  <% 
+    open_count = Case.where(status: :open, case_queue_id: params[:queue_id]).count 
+    closed_count = Case.where(status: :closed, case_queue_id: params[:queue_id]).count 
+    my_count = Case.where(status: :open, case_queue_id: params[:queue_id], assigned_to: session[:user_id]).count 
+  %>
+
+  <% if params[:q].nil? %>
+  <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+    <li role="presentation" class="<%= "active" if params[:status] == "open" %>"><a href="<%= admin_ticketing_cases_path(status: "open", queue_id: params[:queue_id])%>">Open (<%= open_count %>)</a></li>
+    <li role="presentation" class="<%= "active" if params[:status] == "closed" %>"><a href="<%= admin_ticketing_cases_path(status: "closed", queue_id: params[:queue_id]) %>">Closed (<%= closed_count %>)</a></li>
+    <li role="presentation" class="<%= "active" if params[:user_id] == session[:user_id] %>"><a href="<%= admin_ticketing_cases_path(user_id: session[:user_id], queue_id: params[:queue_id]) %>">My Cases (<%= my_count %>)</a></li>
+  </ul>
+  <% end %>
 
 <%= will_paginate @cases %>
 <form id="frmBatch" action="" method="post">
@@ -76,11 +99,7 @@ end %>
 <% content_for :breadcrumbs do %>
 	<li><a href="#">Ticketing</a></li>
 	<li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
-    <% if q %>
-        <li class="active"><%= q.name %></li>
-    <% else %>
-        <li class="active">All Cases</li>
-    <% end %>
+  <li class="active">Cases</li>
 <% end %>
 
 <% content_for :head do %>
@@ -92,6 +111,10 @@ end %>
 	            $("#frmBatch").attr("action", $("#selAction").val());
 	            $("#frmBatch").attr("method", $("#selAction option:selected").attr("method"));
 	            $("#frmBatch").submit();
+	        });
+          
+	        $("#selQueue").change(function () {
+	            window.location = $("#selQueue option:selected").val();
 	        });
 
           $("#chkAll").change(function() {
