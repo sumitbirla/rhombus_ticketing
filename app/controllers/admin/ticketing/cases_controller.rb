@@ -8,7 +8,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     @cases = Case.page(params[:page]).order(received_at: :desc)
     @cases = @cases.where(case_queue_id: params[:queue_id]) unless params[:queue_id].blank?
     @cases = @cases.where(assigned_to: params[:user_id]) unless params[:user_id].blank?
-    @cases = @cases.where(status: params[:status]) unless params[:status].blank?
+    @cases = @cases.where(status: status) unless status.blank?
   end
 
   def new
@@ -47,7 +47,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   def destroy
     @case = Case.find(params[:id])
     @case.destroy
-    redirect_to action: 'index', notice: 'Case has been deleted.'
+    redirect_to action: 'index', status: :open, queue_id: @case.casequeue_id, notice: 'Case has been deleted.'
   end
   
   def raw_data

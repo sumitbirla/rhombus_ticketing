@@ -29,16 +29,16 @@
  
 
   <% 
-    open_count = Case.where(status: :open, case_queue_id: params[:queue_id]).count 
+    open_count = Case.where(status: [:new, :open], case_queue_id: params[:queue_id]).count 
     closed_count = Case.where(status: :closed, case_queue_id: params[:queue_id]).count 
-    my_count = Case.where(status: :open, case_queue_id: params[:queue_id], assigned_to: session[:user_id]).count 
+    my_count = Case.where(status: [:new, :open], case_queue_id: params[:queue_id], assigned_to: session[:user_id]).count 
   %>
 
   <% if params[:q].nil? %>
   <ul class="nav nav-tabs" style="margin-bottom: 10px;">
-    <li role="presentation" class="<%= "active" if params[:status] == "open" %>"><a href="<%= admin_ticketing_cases_path(status: "open", queue_id: params[:queue_id])%>">Open (<%= open_count %>)</a></li>
-    <li role="presentation" class="<%= "active" if params[:status] == "closed" %>"><a href="<%= admin_ticketing_cases_path(status: "closed", queue_id: params[:queue_id]) %>">Closed (<%= closed_count %>)</a></li>
-    <li role="presentation" class="<%= "active" if params[:user_id] == session[:user_id] %>"><a href="<%= admin_ticketing_cases_path(user_id: session[:user_id], queue_id: params[:queue_id]) %>">My Cases (<%= my_count %>)</a></li>
+    <li role="presentation" class="<%= "active" if params[:status] == "open" %>"><a href="<%= admin_ticketing_cases_path(status: :open, queue_id: params[:queue_id])%>">Open (<%= open_count %>)</a></li>
+    <li role="presentation" class="<%= "active" if params[:status] == "closed" %>"><a href="<%= admin_ticketing_cases_path(status: :closed, queue_id: params[:queue_id]) %>">Closed (<%= closed_count %>)</a></li>
+    <li role="presentation" class="<%= "active" if params[:user_id] == session[:user_id].to_s %>"><a href="<%= admin_ticketing_cases_path(status: :open, user_id: session[:user_id], queue_id: params[:queue_id]) %>">My Cases (<%= my_count %>)</a></li>
   </ul>
   <% end %>
 
