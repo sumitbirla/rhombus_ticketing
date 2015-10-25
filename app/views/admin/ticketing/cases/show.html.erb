@@ -144,6 +144,6 @@
 
 <% content_for :breadcrumbs do %>
 	<li><a href="#">Ticketing</a></li>
-  <li><%= link_to @case.case_queue.name, admin_ticketing_cases_path(case_queue_id: @case.case_queue_id, status: :open) %></li>
+  <li><%= link_to @case.case_queue.name, admin_ticketing_cases_path(queue_id: @case.case_queue_id, status: :open) %></li>
   <li>Case #<%= @case.id %></li>
 <% end %>
