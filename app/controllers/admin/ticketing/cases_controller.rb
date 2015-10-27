@@ -5,7 +5,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     status = params[:status]
     status = ["open", "new"] if status == "open"
     
-    @cases = Case.page(params[:page]).order(received_at: :desc)
+    @cases = Case.includes(:assignee).page(params[:page]).order(received_at: :desc)
     @cases = @cases.where(case_queue_id: params[:queue_id]) unless params[:queue_id].blank?
     @cases = @cases.where(assigned_to: params[:user_id]) unless params[:user_id].blank?
     @cases = @cases.where(status: status) unless status.blank?

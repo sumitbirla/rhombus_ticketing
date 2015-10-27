@@ -7,7 +7,7 @@
     <% end %>
     <span class="fa arrow"></span></a>
   <ul class="nav nav-second-level">
-    <% CaseQueue.all.each do |q| %>
+    <% TicketingCache.queue_list.each do |q| %>
     <li>
       <%= link_to admin_ticketing_cases_path(queue_id: q.id, status: :open) do %>
         <%= q.name %>
