@@ -92,10 +92,6 @@
 <% end %>
 
 
-<% content_for :menu do
-    render "admin/shared/ticketing_menu"
-end %>
-
 <% content_for :breadcrumbs do %>
 	<li><a href="#">Ticketing</a></li>
 	<li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>

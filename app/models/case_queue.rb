@@ -13,7 +13,7 @@
 #  web_confirmation   :text(65535)
 #  pop3_enabled       :boolean          not null
 #  pop3_host          :string(255)
-#  pop3_port          :integer          default(110), not null
+#  pop3_port          :integer          default("110"), not null
 #  pop3_login         :string(255)
 #  pop3_password      :string(255)
 #  pop3_use_ssl       :boolean
