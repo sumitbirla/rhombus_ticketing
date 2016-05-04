@@ -1,17 +1,9 @@
 require 'net/pop'
 
-
-class TicketImportJob < ActiveJob::Base
-  queue_as :default
+namespace :rhombus_ticketing do
   
-  # reschedule job
-  after_perform do |job|
-    self.class.set(wait: 300).perform_later
-  end
-  
-  
-  # Do the work
-  def perform(*args)  
+  desc "Read customer service emails from a POP3 mailbox"
+  task process_inbox: :environment do  
     @logger = Logger.new(Rails.root.join("log", "crm.log"))
       
     CaseQueue.where(pop3_enabled: true).each do |q|
@@ -80,7 +72,6 @@ class TicketImportJob < ActiveJob::Base
         CaseMailer.assigned(c).deliver_later
       end
     end
-    
   end
-  
+
 end
