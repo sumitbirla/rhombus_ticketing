@@ -3,7 +3,7 @@ require 'net/pop'
 namespace :rhombus_ticketing do
   
   desc "Read customer service emails from a POP3 mailbox"
-  task process_inbox: :environment do  
+  task inbox: :environment do  
     @logger = Logger.new(Rails.root.join("log", "crm.log"))
       
     CaseQueue.where(pop3_enabled: true).each do |q|
