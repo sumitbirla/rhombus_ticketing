@@ -31,7 +31,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     
     # update user_id if not set and information available
     
-    if @case.user_id.nil? 
+    if @case.user_id.nil? && !@case.email.blank?
       u = User.find_by(email: @case.email)
       
       if u
