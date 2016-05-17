@@ -28,7 +28,7 @@
     <td class="col-md-3">Customer</td>
     <td>
       <% if @case.user_id %>
-        <%= link_to @case.user.name %>
+        <%= link_to @case.user.name, admin_system_user_path(@case.user) %>
       <% else %>
         <%= @case.name %>
       <% end %>

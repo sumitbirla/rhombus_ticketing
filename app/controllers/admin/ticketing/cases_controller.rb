@@ -28,6 +28,22 @@ class Admin::Ticketing::CasesController < Admin::BaseController
 
   def show
     @case = Case.find(params[:id])
+    
+    # update user_id if not set and information available
+    
+    if @case.user_id.nil? 
+      u = User.find_by(email: @case.email)
+      
+      if u
+        @case.user_id = u.id
+      elsif Rails.configuration.modules.include?(:store)
+        o = Order.find_by(notify_email: @case.email)
+        @case.user_id = o.user_id unless o.nil?
+      end
+      
+      @case.save
+    end
+    
   end
 
   def edit
