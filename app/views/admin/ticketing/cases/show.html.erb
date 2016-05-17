@@ -18,7 +18,7 @@
     <td>Via</td>
     <td>
       <%= @case.received_via %> 
-      <%= link_to "raw data", raw_data_admin_ticketing_case_path(@case), class: "small" %>
+      <%= link_to "raw data", raw_data_admin_ticketing_case_path(@case), class: "small", target: "_new" %>
     </td>
   </tr>
 </table>
@@ -36,12 +36,20 @@
   </tr>
   <tr>
     <td>Email</td>
-    <td><%= @case.email %></td>
+    <td>
+      <%= link_to "mailto:#{@case.email}" do %>
+        <i class="fa fa-envelope"></i> <%= @case.email %>
+      <% end %>
+    </td>
   </tr>
   <% unless @case.phone.blank? %>
   <tr>
     <td>Phone</td>
-    <td><%= @case.phone %></td>
+    <td>
+      <%= link_to "tel:#{@case.phone}" do %>
+        <i class="fa fa-phone"></i> <%= number_to_phone(@case.phone) %>
+      <% end %>
+    </td>
   </tr>
   <% end %>
   <tr>
@@ -57,7 +65,13 @@
     <td>Attachments</td>
     <td>
       <% @case.attachments.split("|").each do |filename| %>
-        <%= link_to filename, attachment_admin_ticketing_case_path(id: @case.id, filename: filename) %> &nbsp;  
+        <% if filename.include?(".mp3") %>
+          <audio controls>
+            <source src="<%= attachment_admin_ticketing_case_path(id: @case.id, filename: filename) %>" type="audio/mpeg">
+          </audio>
+        <% else %>
+          <%= link_to filename, attachment_admin_ticketing_case_path(id: @case.id, filename: filename) %> &nbsp;
+        <% end %>  
       <% end%>
     </td>
   </tr>

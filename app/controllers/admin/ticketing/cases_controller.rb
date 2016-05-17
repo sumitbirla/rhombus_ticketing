@@ -29,19 +29,32 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   def show
     @case = Case.find(params[:id])
     
-    # update user_id if not set and information available
-    
+    # update user_id if not set and email information available    
     if @case.user_id.nil? && !@case.email.blank?
       u = User.find_by(email: @case.email)
       
       if u
-        @case.user_id = u.id
+        @case.update(user_id: u.id)
       elsif Rails.configuration.modules.include?(:store)
         o = Order.find_by(notify_email: @case.email)
-        @case.user_id = o.user_id unless o.nil?
+        @case.update(user_id: o.user_id) unless o.nil?
       end
+    end
+    
+    # update user_id if not set and phone number information available    
+    if @case.user_id.nil? && @case.subject.include?("Voicemail")
       
-      @case.save
+      number = @case.subject.scan(/\d+/).first
+      u = User.find_by(phone: number)
+      
+      @case.update(phone: number) if @case.phone.blank? && !number.blank?
+        
+      if u
+        @case.update(user_id: u.id, name: u.name, email: u.email)
+      elsif Rails.configuration.modules.include?(:store)
+        o = Order.find_by(contact_phone: number)
+        @case.update(user_id: o.user_id, name: o.billing_name, email: o.notify_email) unless o.nil?
+      end
     end
     
   end
