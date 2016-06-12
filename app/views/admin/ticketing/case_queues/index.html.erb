@@ -35,16 +35,12 @@
 	<% end %>
 </table>
 
+<%= render 'admin/shared/table_summary', data: @case_queues %>
 
 
 <% content_for :title do %>
 	Case Queues
 <% end %>
-
-
-<% content_for :menu do
-    render "admin/shared/ticketing_menu"
-end %>
 
 
 <% content_for :breadcrumbs do %>

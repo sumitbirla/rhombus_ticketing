@@ -22,8 +22,9 @@
 #
 
 class Case < ActiveRecord::Base
-  self.table_name = "crm_cases"
+  include Exportable
   
+  self.table_name = "crm_cases"
   scope :open, -> { where(status: ['new', 'open']) }
   
   belongs_to :case_queue

@@ -23,6 +23,8 @@
 #
 
 class CaseQueue < ActiveRecord::Base
+  include Exportable
+  
   self.table_name = "crm_queues"
   has_many :cases
   belongs_to :assigned, class_name: 'User', foreign_key: 'initial_assignment'

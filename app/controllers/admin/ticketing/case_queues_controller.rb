@@ -1,7 +1,12 @@
 class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   
   def index
-    @case_queues = CaseQueue.page(params[:page]).order('name')
+    @case_queues = CaseQueue.order(:name)
+    
+    respond_to do |format|
+      format.html { @case_queues = @case_queues.page(params[:page]) }
+      format.csv { send_data CaseQueue.to_csv(@case_queues) }
+    end
   end
 
   def new

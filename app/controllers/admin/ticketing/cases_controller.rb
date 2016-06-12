@@ -9,6 +9,11 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     @cases = @cases.where(case_queue_id: params[:queue_id]) unless params[:queue_id].blank?
     @cases = @cases.where(assigned_to: params[:user_id]) unless params[:user_id].blank?
     @cases = @cases.where(status: status) unless status.blank?
+    
+    respond_to do |format|
+      format.html { @cases = @cases.page(params[:page]) }
+      format.csv { send_data Case.to_csv(@cases, skip_cols: ['raw_data']) }
+    end
   end
 
   def new
