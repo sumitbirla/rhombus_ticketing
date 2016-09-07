@@ -6,10 +6,12 @@
   Case #<%= @case.id %></h2>
 
 <table class="table summary table-condensed table-bordered">
+  <% unless @case.assignee.nil?%>
   <tr>
     <td class="col-md-3">Assigned to</td>
     <td><%= link_to @case.assignee, admin_system_user_path(@case.assignee) %></td>
   </tr>
+  <% end %>
   <tr>
     <td>Received</td>
     <td><%= systime @case.received_at %>  &nbsp; <span class="light">(<%= time_ago_in_words(@case.received_at)%> ago)</span></td>

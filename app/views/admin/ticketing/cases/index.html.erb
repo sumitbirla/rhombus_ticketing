@@ -76,7 +76,7 @@
       </td>
       <td><%= case_status_indicator c %></td>
       <td><%= case_priority_indicator c %></td>
-  		<td><% unless c.assigned_to.nil? %>
+  		<td><% unless c.assignee.nil? %>
   			<%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
   			<% else %>
   			- none -
