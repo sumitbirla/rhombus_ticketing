@@ -5,13 +5,13 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     status = params[:status]
     status = ["open", "new"] if status == "open"
     
-    @cases = Case.includes(:assignee).page(params[:page]).order(received_at: :desc)
+    @cases = Case.includes(:assignee).paginate(page: params[:page], per_page: @per_page).order(received_at: :desc)
     @cases = @cases.where(case_queue_id: params[:queue_id]) unless params[:queue_id].blank?
     @cases = @cases.where(assigned_to: params[:user_id]) unless params[:user_id].blank?
     @cases = @cases.where(status: status) unless status.blank?
     
     respond_to do |format|
-      format.html { @cases = @cases.page(params[:page]) }
+      format.html { @cases = @cases.paginate(page: params[:page], per_page: @per_page) }
       format.csv { send_data Case.to_csv(@cases, skip_cols: ['raw_data']) }
     end
   end

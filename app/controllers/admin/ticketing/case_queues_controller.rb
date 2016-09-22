@@ -4,7 +4,7 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
     @case_queues = CaseQueue.order(:name)
     
     respond_to do |format|
-      format.html { @case_queues = @case_queues.page(params[:page]) }
+      format.html { @case_queues = @case_queues.paginate(page: params[:page], per_page: @per_page) }
       format.csv { send_data CaseQueue.to_csv(@case_queues) }
     end
   end
