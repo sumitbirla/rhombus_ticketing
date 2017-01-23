@@ -1,7 +1,7 @@
 
 <% max = TicketingCache.open_tickets_count %>
 <li class="<%= 'active' if request.original_url.include? 'admin/ticketing' %>">
-  <a href="#"><i class="fa fa-headphones fa-fw"></i> Ticketing  
+  <a href="#"><i class="fa fa-support fa-fw"></i> Ticketing  
     <% if max > 0 %>
     &nbsp; &nbsp; <span class="badge"><%= max %></span>
     <% end %>

@@ -15,18 +15,11 @@
 </div>
 
 <h2>
-  <i class="fa fa-headphones"></i> 
+  <i class="fa fa-support"></i> <%= CaseQueue.find(params[:queue_id])%>
   <%= params[:status].titlecase unless params[:status].blank? %> Cases
   <%= " assigned to " + User.find(params[:user_id]).name unless params[:user_id].nil? %>
 </h2>
 
-  Queue: <select id="selQueue">
-      <% TicketingCache.queue_list.each do |q| %>
-  	  <option <%= "selected" if q.id.to_s == params[:queue_id] %> value="<%= admin_ticketing_cases_path(status: params[:status], queue_id: q.id, user_id: params[:user_id])%>"><%= q.name %></option>
-      <% end %>
-  </select>
-
-<hr>
  
 
   <% 
