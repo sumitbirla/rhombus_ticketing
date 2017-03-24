@@ -17,7 +17,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
 
   def new
-    @case = Case.new received_via: "Email", priority: "Normal", status: "New", case_queue_id: params[:queue_id]
+    @case = Case.new(received_via: "Email", priority: :normal, status: :new, case_queue_id: params[:queue_id], user_id: params[:user_id])
     render 'edit'
   end
 
