@@ -1,17 +1,5 @@
 <div class="pull-right">
-  
-  <select id="selAction" class="form-control" style="display: inline; width: 75%">
-    <option> - - Select Action - - </option>
-	  <option method="get" value="/admin/ticketing/case/new?queue_id=<%= params[:queue_id]%>">New Ticket</option>
-    <option method="post" value="/admin/ticketing/cases_delete_batch">Delete Selected</option>
-    <optgroup label="Change case status to ">
-        <option method="post" value="/admin/ticketing/cases_update_status?status=new">New</option>
-        <option method="post" value="/admin/ticketing/cases_update_status?status=open">Open</option>
-        <option method="post" value="/admin/ticketing/cases_update_status?status=closed">Closed</option>
-    </optgroup>
-  </select>
-  <input type="button" class="btn btn-default btn-small" id="btnAction" value="Go" />
-
+  <%= render 'admin/ticketing/cases/group_actions'%>
 </div>
 
 <h2>
@@ -51,32 +39,7 @@
       <th>Assigned to</th>
   	</tr>
   	<% @cases.each do |c| %>
-  	<tr class="<%= "light" if c.status == "closed" %>">
-      <td><input type="checkbox" name="case_id[]" class="shipment-chk" value="<%= c.id %>"/></td>
-  		<td><%= link_to c.id, admin_ticketing_case_path(c) %></td>
-      <td nowrap><%= systime c.received_at %></td>
-      <td>
-        <% if c.user %>
-          <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
-        <% else %>
-          <%= c.name %>
-        <% end %>
-      </td>
-  		<td>
-        <%= truncate c.subject, length: 40 %>
-        <% unless c.attachments.blank? %>
-          <i class="fa fa-paperclip"></i>
-        <% end %>
-      </td>
-      <td><%= case_status_indicator c %></td>
-      <td><%= case_priority_indicator c %></td>
-  		<td><% unless c.assignee.nil? %>
-  			<%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
-  			<% else %>
-  			- none -
-  			<% end%>
-  		</td>
-  	</tr>
+  	  <%= render partial: 'admin/ticketing/cases/case', locals: { c: c } %>
   	<% end %>
   </table>
 </form>
