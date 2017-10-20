@@ -2,7 +2,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   include ActionView::Helpers::TextHelper
 
   def index
-    authorize Case
+    authorize Case.new
     
     status = params[:status]
     status = ["open", "new"] if status == "open"

@@ -1,7 +1,7 @@
 class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   
   def index
-    authorize CaseQueue
+    authorize CaseQueue.new
     @case_queues = CaseQueue.order(:name)
     
     respond_to do |format|
