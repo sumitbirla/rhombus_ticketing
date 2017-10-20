@@ -1,7 +1,7 @@
 class Admin::Ticketing::CaseUpdatesController < ApplicationController
   
   def create
-    @case_update = CaseUpdate.new(case_update_params)
+    @case_update = authorize CaseUpdate.new(case_update_params)
     @case_update.received_at = DateTime.now
     
     if @case_update.save
@@ -35,11 +35,14 @@ class Admin::Ticketing::CaseUpdatesController < ApplicationController
   
   def raw_data
     @case_update = CaseUpdate.find(params[:id])
+    authorize @case_update, :show?
     send_data @case_update.raw_data, type: "text/plain", disposition: "inline"
   end
   
   def attachment
     @case_update = CaseUpdate.find(params[:id])
+    authorize @case_update, :show?
+    
     attachment = Mail.new(@case_update.raw_data).attachments.find { |x| x.filename == params[:filename] }
     unless attachment.nil?
       send_data attachment.body.decoded, type: attachment.content_type

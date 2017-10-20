@@ -29,4 +29,9 @@ class CaseUpdate < ActiveRecord::Base
       errors.add(:base, "No update was specified.")
     end
   end
+  
+  # PUNDIT
+  def self.policy_class
+    ApplicationPolicy
+  end
 end

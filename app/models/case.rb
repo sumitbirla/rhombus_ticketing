@@ -43,6 +43,11 @@ class Case < ActiveRecord::Base
   def self.valid_priorities
     ['normal', 'high', 'urgent']
   end
+  
+  # PUNDIT
+  def self.policy_class
+    ApplicationPolicy
+  end
 
   private
 

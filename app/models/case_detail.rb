@@ -14,4 +14,9 @@
 class CaseDetail < ActiveRecord::Base
   self.table_name = "crm_case_details"
   belongs_to :case
+  
+  # PUNDIT
+  def self.policy_class
+    ApplicationPolicy
+  end
 end

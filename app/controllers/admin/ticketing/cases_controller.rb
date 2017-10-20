@@ -2,6 +2,8 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   include ActionView::Helpers::TextHelper
 
   def index
+    authorize Case
+    
     status = params[:status]
     status = ["open", "new"] if status == "open"
     
@@ -17,12 +19,12 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
 
   def new
-    @case = Case.new(received_via: "Email", priority: :normal, status: :new, case_queue_id: params[:queue_id], user_id: params[:user_id])
+    @case = authorize Case.new(received_via: "Email", priority: :normal, status: :new, case_queue_id: params[:queue_id], user_id: params[:user_id])
     render 'edit'
   end
 
   def create
-    @case = Case.new(case_params)
+    @case = authorize Case.new(case_params)
     
     if @case.save
       redirect_to action: 'index', notice: 'Case was successfully created.'
@@ -32,7 +34,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
 
   def show
-    @case = Case.find(params[:id])
+    @case = authorize Case.find(params[:id])
     
     # update user_id if not set and email information available    
     if @case.user_id.nil? && !@case.email.blank?
@@ -65,11 +67,11 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
 
   def edit
-    @case = Case.find(params[:id])
+    @case = authorize Case.find(params[:id])
   end
 
   def update
-    @case = Case.find(params[:id])
+    @case = authorize Case.find(params[:id])
     
     if @case.update(case_params)
       redirect_to action: 'index', notice: 'Case was successfully updated.'
@@ -79,18 +81,22 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
 
   def destroy
-    @case = Case.find(params[:id])
+    @case = authorize Case.find(params[:id])
     @case.destroy
     redirect_to action: 'index', status: :open, queue_id: @case.casequeue_id, notice: 'Case has been deleted.'
   end
   
   def raw_data
     @case = Case.find(params[:id])
+    authorize @case, :show?
+    
     send_data @case.raw_data, type: "text/plain", disposition: "inline"
   end
   
   def attachment
     @case = Case.find(params[:id])
+    authorize @case, :show?
+    
     attachment = Mail.new(@case.raw_data).attachments.find { |x| x.filename == params[:filename] }
     unless attachment.nil?
       send_data attachment.body.decoded, type: attachment.content_type
@@ -100,6 +106,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
   
   def update_status
+    authorize Case, :update?
     count = 0 
     
     Case.where(id: params[:case_id]).each do |c|
@@ -115,6 +122,8 @@ class Admin::Ticketing::CasesController < Admin::BaseController
   end
   
   def delete_batch
+    authorize Case, :destroy?
+    
     list = Case.destroy_all(id: params[:case_id])
     flash[:success] = "#{pluralize(list.length, "case")} deleted."
     redirect_to :back

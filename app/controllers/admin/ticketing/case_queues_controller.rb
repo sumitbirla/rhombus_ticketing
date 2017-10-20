@@ -1,6 +1,7 @@
 class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   
   def index
+    authorize CaseQueue
     @case_queues = CaseQueue.order(:name)
     
     respond_to do |format|
@@ -10,12 +11,12 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   end
 
   def new
-    @case_queue = CaseQueue.new name: 'New queue'
+    @case_queue = authorize CaseQueue.new(name: 'New queue')
     render 'edit'
   end
 
   def create
-    @case_queue = CaseQueue.new(case_queue_params)
+    @case_queue = authorize CaseQueue.new(case_queue_params)
     
     if @case_queue.save
       Rails.cache.delete :case_queue_list
@@ -26,15 +27,15 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   end
 
   def show
-    @case_queue = CaseQueue.find(params[:id])
+    @case_queue = authorize CaseQueue.find(params[:id])
   end
 
   def edit
-    @case_queue = CaseQueue.find(params[:id])
+    @case_queue = authorize CaseQueue.find(params[:id])
   end
 
   def update
-    @case_queue = CaseQueue.find(params[:id])
+    @case_queue = authorize CaseQueue.find(params[:id])
     
     if @case_queue.update(case_queue_params)
       Rails.cache.delete :case_queue_list
@@ -45,7 +46,7 @@ class Admin::Ticketing::CaseQueuesController < Admin::BaseController
   end
 
   def destroy
-    @case_queue = CaseQueue.find(params[:id])
+    @case_queue = authorize CaseQueue.find(params[:id])
     @case_queue.destroy
     
     Rails.cache.delete :case_queue_list
