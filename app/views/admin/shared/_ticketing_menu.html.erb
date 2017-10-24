@@ -18,6 +18,8 @@
       <% end %>
     </li>
     <% end %>
-    <li><%= link_to "Configure", admin_ticketing_case_queues_path %></li>
+    <% if current_user.has_permission?('CaseQueue', 'index')%>
+      <li><%= link_to "Configure", admin_ticketing_case_queues_path %></li>
+    <% end %>
   </ul>
 </li>
