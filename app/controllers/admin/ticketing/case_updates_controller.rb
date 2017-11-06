@@ -1,4 +1,4 @@
-class Admin::Ticketing::CaseUpdatesController < ApplicationController
+class Admin::Ticketing::CaseUpdatesController < Admin::BaseController
   
   def create
     @case_update = authorize CaseUpdate.new(case_update_params)
