@@ -2,7 +2,7 @@ class CasesController < ApplicationController
   
   def new
     @case = Case.new(subject: params[:subject])
-    @case.assign_attributes(name: current_user.name, email: current_user.email) unless current_user.nil?
+    @case.assign_attributes(name: current_user.name, email: current_user.email) if logged_in?
   end
   
   def create
