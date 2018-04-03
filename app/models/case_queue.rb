@@ -3,6 +3,7 @@
 # Table name: crm_queues
 #
 #  id                 :integer          not null, primary key
+#  affiliate_id       :integer
 #  name               :string(255)      not null
 #  notify_email       :string(255)
 #  initial_assignment :integer
@@ -13,7 +14,7 @@
 #  web_confirmation   :text(65535)
 #  pop3_enabled       :boolean          not null
 #  pop3_host          :string(255)
-#  pop3_port          :integer          default("110"), not null
+#  pop3_port          :integer          default(110), not null
 #  pop3_login         :string(255)
 #  pop3_password      :string(255)
 #  pop3_use_ssl       :boolean
@@ -27,6 +28,7 @@ class CaseQueue < ActiveRecord::Base
   
   self.table_name = "crm_queues"
   has_many :cases
+  belongs_to :affiliate
   belongs_to :assigned, class_name: 'User', foreign_key: 'initial_assignment'
   validates_presence_of :name, :reply_name, :reply_email
 

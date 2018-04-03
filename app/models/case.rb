@@ -8,7 +8,7 @@
 #  priority      :string(255)      not null
 #  status        :string(255)      not null
 #  assigned_to   :integer
-#  attachments   :string(255)      default("0"), not null
+#  attachments   :string(255)
 #  user_id       :integer
 #  name          :string(255)      not null
 #  email         :string(255)

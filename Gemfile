@@ -12,3 +12,5 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+
+gem 'rhombus_core', path: '../rhombus_core'
