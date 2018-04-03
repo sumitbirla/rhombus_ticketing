@@ -27,10 +27,11 @@ class CaseQueue < ActiveRecord::Base
   include Exportable
   
   self.table_name = "crm_queues"
-  has_many :cases
+  has_many :cases, dependent: :destroy
   belongs_to :affiliate
   belongs_to :assigned, class_name: 'User', foreign_key: 'initial_assignment'
   validates_presence_of :name, :reply_name, :reply_email
+  validates_uniqueness_of :name, scope: :affiliate_id
 
   def to_s
     name
