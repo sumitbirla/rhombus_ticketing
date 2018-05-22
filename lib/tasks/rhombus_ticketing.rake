@@ -20,7 +20,7 @@ namespace :rhombus_ticketing do
   
   # Parse single email message and put in database
   def process_message(q, mail)
-    msg = Mail.new(mail.pop)
+    msg = Mail.new(mail.pop(''.dup))  # Ruby 2.5 bug requires .dup to fix
     @logger.debug msg.from.to_s + " => " + msg.to.to_s + "[#{msg.subject}]"
     
     unless msg.multipart?
