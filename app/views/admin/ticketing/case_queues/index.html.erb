@@ -7,25 +7,23 @@
 	<tr>
 		<th>Name</th>
     <th>Affiliate</th>
-		<th>Notification</th>
 		<th>Initial assignment</th>
-		<th class="calign">Open cases</th>
-		<th>&nbsp;</th>
+		<th class="text-center">Open cases</th>
+		<th class="text-right">&nbsp;</th>
 	</tr>
 	<% @case_queues.each do |queue| %>
 	<tr>
 		<td><%= link_to queue.name, admin_ticketing_cases_path(queue_id: queue.id) %></td>
     <td><%= queue.affiliate_id ? queue.affiliate : '- not set-' %></td>
-		<td><%= queue.notify_email %></td>
 		<td>
     <% unless queue.initial_assignment.nil? %>
-			<%= link_to queue.assigned %>
+			<%= link_to queue.assigned, admin_system_user_path(queue.initial_assignment) %>
 		<% else %>
 			- none -
 		<% end%>
 		</td>
-		<td class="calign"><%= queue.cases.open.length %></td>
-		<td>
+		<td class="text-center"><%= queue.cases.open.length %></td>
+		<td class="text-right">
 			<%= link_to "cases", admin_ticketing_cases_path(queue_id: queue.id) %> &nbsp;
 			<%= link_to "edit", edit_admin_ticketing_case_queue_path(queue) %> &nbsp;
 			<%= link_to "delete", 
