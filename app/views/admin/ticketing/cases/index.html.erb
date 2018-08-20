@@ -3,7 +3,7 @@
 </div>
 
 <h2>
-  <i class="fa fa-support"></i> <%= CaseQueue.find(params[:queue_id]) unless params[:queue_id].blank? %>
+  <i class="fa fa-headset"></i> <%= CaseQueue.find(params[:queue_id]) unless params[:queue_id].blank? %>
   <%= params[:status].titlecase unless params[:status].blank? %> Cases
   <%= " assigned to " + User.find(params[:user_id]).name unless params[:user_id].nil? %>
 </h2>
