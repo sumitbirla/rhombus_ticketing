@@ -12,22 +12,8 @@
   <%= f.input :reply_name %>
   <%= f.input :reply_email %>
   <%= f.input :reply_signature, input_html: { class: 'span4', rows: 5 } %>
-  <%= f.input :web_instruction %>
-  <script>
-        ClassicEditor
-            .create( document.querySelector( '#case_queue_web_instruction' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-  </script>
-  <%= f.input :web_confirmation %>
-  <script>
-        ClassicEditor
-            .create( document.querySelector( '#case_queue_web_confirmation' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-  </script>
+  <%= ckeditor_input(@case_queue, "web_instruction") %>
+  <%= ckeditor_input(@case_queue, "web_confirmation") %>
   <%= f.input :affiliate_id %>
   <%= f.input :inactivity_expiration_days %>
 
