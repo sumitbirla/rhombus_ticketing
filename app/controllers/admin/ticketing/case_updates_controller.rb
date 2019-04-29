@@ -30,7 +30,7 @@ class Admin::Ticketing::CaseUpdatesController < Admin::BaseController
       flash[:error] = @case_update.errors.full_messages.join("<br>").html_safe
     end
     
-    redirect_to :back
+    redirect_back(fallback_location: admin_root_path)
   end
   
   def raw_data

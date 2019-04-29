@@ -120,7 +120,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     end
     
     flash[:success] = "Status of #{pluralize(count, "case")} updated to '#{params[:status]}'."
-    redirect_to :back
+    redirect_back(fallback_location: admin_root_path)
   end
   
   def delete_batch
@@ -128,7 +128,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     
     list = Case.destroy_all(id: params[:case_id])
     flash[:success] = "#{pluralize(list.length, "case")} deleted."
-    redirect_to :back
+    redirect_back(fallback_location: admin_root_path)
   end
   
   
