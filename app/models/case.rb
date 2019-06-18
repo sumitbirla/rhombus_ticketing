@@ -25,15 +25,15 @@ class Case < ActiveRecord::Base
   include Exportable
   
   self.table_name = "crm_cases"
-  scope :open, -> { where(status: ['new', 'open']) }
   
   belongs_to :case_queue
   belongs_to :user
+  belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
   
   has_many :extra_properties, -> { order "sort, name" }, as: :extra_property
   has_many :updates, class_name: 'CaseUpdate', dependent: :destroy
-  belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
-
+  has_many :attachments, as: :attachable, dependent: :destroy
+  
   validates_presence_of :case_queue_id, :name, :subject, :priority, :status, :received_via
   validate :phone_or_email
   

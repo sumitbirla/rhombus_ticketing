@@ -16,6 +16,6 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   
-  s.add_dependency "rhombus_core"
+  s.add_dependency "rhombus_cms"
   s.add_dependency "mail"
 end
