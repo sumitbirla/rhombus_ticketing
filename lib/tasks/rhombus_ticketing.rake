@@ -4,7 +4,8 @@ namespace :rhombus_ticketing do
   
   desc "Read customer service emails from a POP3 mailbox"
   task inbox: :environment do  
-    @logger = Logger.new(Rails.root.join("log", "crm.log"))
+    #@logger = Logger.new(Rails.root.join("log", "crm.log"))
+    @logger = Logger.new(STDOUT)
       
     CaseQueue.where(pop3_enabled: true).each do |q|
       
@@ -49,13 +50,16 @@ namespace :rhombus_ticketing do
                   priority: :normal,
                   status: :new,
                   assigned_to: q.initial_assignment,
-                  attachments: msg.attachments.map { |x| x.filename }.join("|"),
+                  # attachments: msg.attachments.map { |x| x.filename }.join("|"),
                   name: msg[:from].display_names.first || msg.from[0],
                   email: msg.from[0],
                   subject: msg.subject,
                   description: desc,
                   received_via: :email,
                   raw_data: msg.to_s )
+                  
+                  puts ">>>> #{msg.attachments}"
+
     end
                 
     user = User.find_by(email: msg.sender)   
