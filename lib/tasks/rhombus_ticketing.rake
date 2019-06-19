@@ -1,4 +1,5 @@
 require 'net/pop'
+require 'mail'
 
 namespace :rhombus_ticketing do
   
