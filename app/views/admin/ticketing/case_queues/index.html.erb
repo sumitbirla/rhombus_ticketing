@@ -8,7 +8,9 @@
 		<th>Name</th>
     <th>Affiliate</th>
 		<th>Initial assignment</th>
+    <th class="text-center">New cases</th>
 		<th class="text-center">Open cases</th>
+    <th class="text-center">Closed cases</th>
 		<th class="text-right">&nbsp;</th>
 	</tr>
 	<% @case_queues.each do |queue| %>
@@ -22,7 +24,9 @@
 			- none -
 		<% end%>
 		</td>
-		<td class="text-center"><%= queue.cases.open.length %></td>
+    <td class="text-center"><%= number_with_delimiter Case.where(case_queue_id: queue.id, status: :new).count %></td>
+		<td class="text-center"><%= number_with_delimiter Case.where(case_queue_id: queue.id, status: :open).count %></td>
+    <td class="text-center"><%= number_with_delimiter Case.where(case_queue_id: queue.id, status: :closed).count %></td>
 		<td class="text-right">
 			<%= link_to "cases", admin_ticketing_cases_path(queue_id: queue.id) %> &nbsp;
 			<%= link_to "edit", edit_admin_ticketing_case_queue_path(queue) %> &nbsp;
