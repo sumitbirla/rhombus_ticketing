@@ -51,13 +51,24 @@ namespace :rhombus_ticketing do
                   priority: :normal,
                   status: :new,
                   assigned_to: q.initial_assignment,
-                  # attachments: msg.attachments.map { |x| x.filename }.join("|"),
                   name: msg[:from].display_names.first || msg.from[0],
                   email: msg.from[0],
                   subject: msg.subject,
                   description: desc,
                   received_via: :email,
                   raw_data: msg.to_s )
+    end
+    
+    base_path = Setting.get(Rails.configuration.domain_id, :system, "Static Files Path")
+    
+    msg.attachments.each do |attch|
+      file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
+      File.write(base_path + file_path, attch.body.decoded)
+      
+      c.attachments.build(file_name: attch.filename,
+                          file_size: attch.body.decoded.length,
+                          content_type: attch.mime_type,
+                          file_path: file_path)
     end
                 
     user = User.find_by(email: msg.sender)   
