@@ -63,8 +63,9 @@ namespace :rhombus_ticketing do
     
     msg.attachments.each do |attch|
       file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
-      File.write(base_path + file_path, attch.body.decoded)
       
+      File.open(base_path + file_path, "w+b", 0644) { |f| f.write attch.body.decoded }
+
       c.attachments.build(file_name: attch.filename,
                           file_size: attch.body.decoded.length,
                           content_type: attch.mime_type,
