@@ -4,8 +4,8 @@ namespace :rhombus_ticketing do
   
   desc "Read customer service emails from a POP3 mailbox"
   task inbox: :environment do  
-    #@logger = Logger.new(Rails.root.join("log", "crm.log"))
-    @logger = Logger.new(STDOUT)
+    @logger = Logger.new(Rails.root.join("log", "crm.log"))
+    #@logger = Logger.new(STDOUT)
       
     CaseQueue.where(pop3_enabled: true).each do |q|
       
@@ -57,9 +57,6 @@ namespace :rhombus_ticketing do
                   description: desc,
                   received_via: :email,
                   raw_data: msg.to_s )
-                  
-                  puts ">>>> #{msg.attachments}"
-
     end
                 
     user = User.find_by(email: msg.sender)   
