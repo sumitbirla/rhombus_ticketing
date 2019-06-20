@@ -68,9 +68,11 @@
     <td>
       <ul style="padding-left: 0;">
       <% @case.attachments.each do |attch| %>
-        <li>
-          <span style="vertical-align: middle; display: inline-block; width: 30px; text-align: center;"><%= icon_for_mimetype(attch.content_type) %></span>
-          <%= link_to attch.file_name, cdn_download_url(attch.file_path), target: "_blank" %>
+        <li style="display: inline-block; text-align: center; width: 80px; margin-top: 8px;">
+          <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
+            <%= icon_for_mimetype(attch.content_type) %><br>
+            <span style="font-size: 8pt;"><%= truncate(attch.file_name, length: 12) %></span>
+          <% end %>
         </li>
       <% end%>
     </ul>
