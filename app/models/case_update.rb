@@ -19,8 +19,11 @@
 
 class CaseUpdate < ActiveRecord::Base
   self.table_name = "crm_case_updates"
-  belongs_to :case
+  
+	belongs_to :case
   belongs_to :user
+	has_many :attachments, as: :attachable, dependent: :destroy
+	
   validates_presence_of :case_id
   validate :case_update
   
