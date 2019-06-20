@@ -69,7 +69,7 @@
       <ul style="padding-left: 0;">
       <% @case.attachments.each do |attch| %>
         <li>
-          <%= icon_for_mimetype(attch.content_type) %>
+          <span style="vertical-align: middle; display: inline-block; width: 30px; text-align: center;"><%= icon_for_mimetype(attch.content_type) %></span>
           <%= link_to attch.file_name, cdn_download_url(attch.file_path), target: "_blank" %>
         </li>
       <% end%>
