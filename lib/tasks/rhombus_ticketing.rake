@@ -62,8 +62,9 @@ namespace :rhombus_ticketing do
     base_path = Setting.get(Rails.configuration.domain_id, :system, "Static Files Path")
     
     msg.attachments.each do |attch|
-      file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
+      next if attch.body.blank?
       
+      file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
       File.open(base_path + file_path, "w+b", 0644) { |f| f.write attch.body.decoded }
 
       c.attachments.build(file_name: attch.filename,

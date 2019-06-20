@@ -66,15 +66,14 @@
   <tr>
     <td>Attachments</td>
     <td>
-      <% @case.attachments.split("|").each do |filename| %>
-        <% if filename.include?(".mp3") %>
-          <audio controls>
-            <source src="<%= attachment_admin_ticketing_case_path(id: @case.id, filename: filename) %>" type="audio/mpeg">
-          </audio>
-        <% else %>
-          <%= link_to filename, attachment_admin_ticketing_case_path(id: @case.id, filename: filename) %> &nbsp;
-        <% end %>  
+      <ul style="padding-left: 0;">
+      <% @case.attachments.each do |attch| %>
+        <li>
+          <%= icon_for_mimetype(attch.content_type) %>
+          <%= link_to attch.file_name, cdn_download_url(attch.file_path), target: "_blank" %>
+        </li>
       <% end%>
+    </ul>
     </td>
   </tr>
   <% end %>
