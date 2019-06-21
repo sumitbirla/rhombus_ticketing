@@ -39,7 +39,7 @@ namespace :rhombus_ticketing do
       c = CaseUpdate.new(case_id: case_id,
                          received_at: msg.date,
                          attachments: msg.attachments.map { |x| x.filename }.join("|"),
-                         raw_data: msg.to_s,
+                         raw_data: msg.header.raw_source,
                          response: desc )
                          
       # reopen case in case it was closed
@@ -57,7 +57,7 @@ namespace :rhombus_ticketing do
                   subject: msg.subject,
                   description: desc,
                   received_via: :email,
-                  raw_data: msg.to_s )
+                  raw_data: msg.header.raw_source )
     end
     
     base_path = Setting.get(Rails.configuration.domain_id, :system, "Static Files Path")
