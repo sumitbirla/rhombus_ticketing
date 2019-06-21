@@ -125,7 +125,11 @@
 <% end %>
 
 
-<% case_update = CaseUpdate.new(case_id: @case.id, user_id: current_user.id) %>
+<% 
+  case_update = CaseUpdate.new(case_id: @case.id, user_id: current_user.id) 
+  role_ids = Role.joins(:permissions).where("core_permissions.resource = 'Case' OR super_user=1").distinct(:id).pluck(:id)
+  assignee_list = User.where(role_id: role_ids).select(:id, :name).order(:name)
+%>
 <%= form_for [:admin, :ticketing, case_update ] do |f| %>
 <div class="panel panel-success">
   <div class="panel-heading">
@@ -143,7 +147,7 @@
   <div class="panel-footer">
     <%= f.select :new_state, Case.valid_states - [@case.status], prompt: "- change state -" %>
     <%= f.select :new_priority, Case.valid_priorities - [@case.priority], prompt: "- change priority -" %>
-    <%= f.collection_select :new_assignee, User.all, :id, :name, prompt: "- assign to -" %>
+    <%= f.collection_select :new_assignee, assignee_list, :id, :name, prompt: "- assign to -" %>
     <%= f.submit "Submit Update", class: "btn btn-primary pull-right" %>
     <div style="clear: right;"></div>
   </div>
