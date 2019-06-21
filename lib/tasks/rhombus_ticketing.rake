@@ -1,5 +1,6 @@
 require 'net/pop'
 require 'mail'
+require 'fileutils'
 
 namespace :rhombus_ticketing do
   
@@ -87,6 +88,58 @@ namespace :rhombus_ticketing do
         CaseMailer.assigned(c).deliver_later
       end
     end
+  end
+	
+	
+  desc "Update older cases to save attachments in cms_attachments table"
+  task extract_attachments: :environment do  
+    @logger = Logger.new(STDOUT)
+      
+		base_path = Setting.get(Rails.configuration.domain_id, :system, "Static Files Path")
+		FileUtils.mkdir_p(base_path + "/attachments")
+		
+    Case.all.each do |c|
+			next if c.raw_data.blank?
+			
+			c.attachments.delete_all
+			msg = Mail.new(c.raw_data)
+			
+	    msg.attachments.each do |attch|
+	      next if attch.body.blank?
+      
+	      file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
+	      File.open(base_path + file_path, "w+b", 0644) { |f| f.write attch.body.decoded }
+
+	      c.attachments.build(file_name: attch.filename,
+	                          file_size: attch.body.decoded.length,
+	                          content_type: attch.mime_type,
+	                          file_path: file_path)
+	    end
+			
+			c.save!
+		end
+		
+    CaseUpdate.all.each do |c|
+			next if c.raw_data.blank?
+			
+			c.attachments.delete_all
+			msg = Mail.new(c.raw_data)
+			
+	    msg.attachments.each do |attch|
+	      next if attch.body.blank?
+      
+	      file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
+	      File.open(base_path + file_path, "w+b", 0644) { |f| f.write attch.body.decoded }
+
+	      c.attachments.build(file_name: attch.filename,
+	                          file_size: attch.body.decoded.length,
+	                          content_type: attch.mime_type,
+	                          file_path: file_path)
+	    end
+			
+			c.save!
+		end
+		
   end
 
 end
