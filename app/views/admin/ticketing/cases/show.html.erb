@@ -70,7 +70,7 @@
       <% @case.attachments.each do |attch| %>
         <li style="display: inline-block; text-align: center; width: 80px; margin-top: 8px;">
           <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
-            <%= icon_for_mimetype(attch.content_type) %><br>
+            <%= icon_for_mimetype(attch.content_type, "fa-4x text-muted") %><br>
             <span style="font-size: 8pt;"><%= truncate(attch.file_name, length: 12) %></span>
           <% end %>
         </li>
@@ -110,11 +110,13 @@
       <% end %>
     
       <div class="pull-right light">
-        <% unless update.attachments.blank? %>
-          <% update.attachments.split("|").each do |filename| %>
-            <%= link_to filename, attachment_admin_ticketing_case_update_path(id: update.id, filename: filename), class: "small" %> &nbsp;  
-          <% end%>
-        <% end %>
+        <% update.attachments.each do |attch| %>
+            <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
+              <%= icon_for_mimetype(attch.content_type, "text-muted") %> 
+              <%= truncate(attch.file_name, length: 12) %> &nbsp; &nbsp; 
+            <% end %>
+        <% end%>
+        
         <% unless update.raw_data.blank? %>
           <%= link_to "raw data", raw_data_admin_ticketing_case_update_path(update), class: "small" %>
         <% end %>
