@@ -5,7 +5,7 @@ class Account::CasesController < Account::BaseController
   end
 
   def show
-    @case = Case.find_by(user_id: session[:user_id], id: param[:id]).includes(:updates, :details)
+    @case = Case.find_by(user_id: session[:user_id], id: params[:id])
   end
   
   def new

@@ -5,7 +5,7 @@ class Admin::Ticketing::CasesController < Admin::BaseController
     authorize Case.new
     
     status = params[:status]
-    status = ["open", "new"] if status == "open"
+    status = "new" if status.blank?
     q = params[:q]
     
     @cases = Case.includes(:assignee).order(received_at: :desc)

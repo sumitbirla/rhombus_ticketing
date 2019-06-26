@@ -9,7 +9,7 @@
   <ul class="nav nav-second-level">
     <% TicketingCache.queue_list.each do |q| %>
     <li>
-      <%= link_to admin_ticketing_cases_path(queue_id: q.id, status: :open) do %>
+      <%= link_to admin_ticketing_cases_path(queue_id: q.id, status: :new) do %>
         <%= q.name %>
         <% count = TicketingCache.open_tickets_count_queue(q.id) %>
         <% if count > 0 %>
