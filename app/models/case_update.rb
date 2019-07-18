@@ -22,6 +22,9 @@ class CaseUpdate < ActiveRecord::Base
   
 	belongs_to :case
   belongs_to :user
+  belongs_to :pbx_sms
+  belongs_to :pbx_db_cdr
+  
 	has_many :attachments, as: :attachable, dependent: :destroy
 	
   validates_presence_of :case_id

@@ -28,6 +28,7 @@ class Case < ActiveRecord::Base
   
   belongs_to :case_queue
   belongs_to :user
+  belongs_to :customer
   belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
   
   has_many :extra_properties, -> { order "sort, name" }, as: :extra_property
