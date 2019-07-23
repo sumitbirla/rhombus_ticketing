@@ -6,8 +6,8 @@ namespace :rhombus_ticketing do
   
   desc "Read customer service emails from a POP3 mailbox"
   task inbox: :environment do  
-    @logger = Logger.new(Rails.root.join("log", "crm.log"))
-    #@logger = Logger.new(STDOUT)
+    # @logger = Logger.new(Rails.root.join("log", "crm.log"))
+    @logger = Logger.new(STDOUT)
       
     CaseQueue.where(pop3_enabled: true).each do |q|
       
@@ -26,41 +26,43 @@ namespace :rhombus_ticketing do
     msg = Mail.new(mail.pop(''.dup))  # Ruby 2.5 bug requires .dup to fix
     @logger.debug msg.from.to_s + " => " + msg.to.to_s + "[#{msg.subject}]"
     
-    unless msg.multipart?
-      desc = msg.body.decoded
-    else     
-      desc = msg.text_part.decoded
-    end
-         
+    desc = (msg.multipart? ? msg.text_part.decoded : msg.body.decoded)
+     
+    # embedded case ID found in email?
     m = /case:::\d{5}:::/.match(desc) 
-       
+
     if m && m.length > 0
       case_id = m[0].gsub("case", "").gsub(":::", "").to_i
-      c = CaseUpdate.new(case_id: case_id,
-                         received_at: msg.date,
-                         attachments: msg.attachments.map { |x| x.filename }.join("|"),
-                         raw_data: msg.header.raw_source,
-                         response: desc )
-                         
-      # reopen case in case it was closed
-      c1 = Case.find(case_id)
-      c1.update_attribute(:status, "open") unless c1.nil?
-      
-    else
-      c = Case.new( case_queue_id: q.id,
-                  received_at: msg.date,
-                  priority: :normal,
-                  status: :new,
-                  assigned_to: q.initial_assignment,
-                  name: msg[:from].display_names.first || msg.from[0],
-                  email: msg.from[0],
-                  subject: msg.subject,
-                  description: desc,
-                  received_via: :email,
-                  raw_data: msg.header.raw_source )
+      c = Case.find(case_id)
     end
     
+    # embedded code not found
+    if c.nil?
+      # Create new customer if needed
+      cust = Customer.find_or_create_by(affiliate_id: q.affiliate_id, email: msg.from[0]) do |x|
+        x.name = msg[:from].display_names.first || msg.from[0]
+      end
+      
+      c = Case.find_or_create_by!(customer_id: cust.id, case_queue_id: q.id, status: [:new, :open]) do |x|
+        x.status = :new
+        assigned_to = q.initial_assignment
+        name = msg[:from].display_names.first || msg.from[0],
+        email = msg.from[0],
+        subject = msg.subject,
+        received_via = :email
+      end
+    end
+    
+    puts "CASE ID = #{c.id}"
+    
+    upd = CaseUpdate.create!(case_id: c.id,
+                             received_at: msg.date,
+                             raw_data: msg.header.raw_source,
+                             response: desc )
+    
+    # Download attachments
     base_path = Setting.get(Rails.configuration.domain_id, :system, "Static Files Path")
+    FileUtils.mkdir_p(base_path + "/attachments")
     
     msg.attachments.each do |attch|
       next if attch.body.blank?
@@ -68,25 +70,23 @@ namespace :rhombus_ticketing do
       file_path = "/attachments/#{SecureRandom.uuid}." + attch.filename.split(".").last.downcase
       File.open(base_path + file_path, "w+b", 0644) { |f| f.write attch.body.decoded }
 
-      c.attachments.build(file_name: attch.filename,
-                          file_size: attch.body.decoded.length,
-                          content_type: attch.mime_type,
-                          file_path: file_path)
+      upd.attachments.create(file_name: attch.filename,
+                             file_size: attch.body.decoded.length,
+                             content_type: attch.mime_type,
+                             file_path: file_path)
     end
                 
     user = User.find_by(email: msg.sender)   
-    c.user_id = user.id unless user.nil?
+    c.update_attribute(:user_id, user.id) unless user.nil?
     
-    if c.save
-      mail.delete
-
-      if c.class.name == "CaseUpdate" 
-        @logger.info "Case ##{c.case.id} received an update"
-        CaseMailer.updated(c).deliver_later
-      else
-        @logger.info "Case ##{c.id} created"
-        CaseMailer.assigned(c).deliver_later
-      end
+    # mail.delete
+    
+    if c.updates.count > 1
+      @logger.info "Case ##{c.id} received an update"
+      CaseMailer.updated(c).deliver_later
+    else
+      @logger.info "Case ##{c.id} created"
+      CaseMailer.assigned(c).deliver_later
     end
   end
 	
