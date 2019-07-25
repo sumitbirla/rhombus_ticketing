@@ -14,7 +14,7 @@ class Customer < ActiveRecord::Base
   before_validation :normalize_phones
   
   validate :contact_info
-	validates_presence_of :pbx_domain_id, :name
+	validates_presence_of :affiliate_id, :name
 	validates_uniqueness_of :mobile_phone, allow_blank: true, scope: :pbx_domain_id
 	validates_uniqueness_of :other_phone, allow_blank: true, scope: :pbx_domain_id
   
