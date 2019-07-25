@@ -26,19 +26,11 @@ class Customer < ActiveRecord::Base
   
   def calls
     list = []
-    
-    unless mobile_phone.blank?
-      list << mobile_phone
-      list << "1" + mobile_phone
-    end
-    
-    unless other_phone.blank?
-      list << other_phone
-      list << "1" + other_phone
-    end
+    list << mobile_phone unless mobile_phone.blank?
+    list << other_phone unless other_phone.blank?
     
     PbxDbCdr.where(pbx_domain_id: pbx_domain_id)
-            .where(sip_from_user: list)
+            .where("sip_from_user IN (?) OR sip_req_user IN (?)", list, list)
             .order(start_time: :desc)
   end
   
