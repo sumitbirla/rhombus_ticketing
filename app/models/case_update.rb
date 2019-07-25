@@ -27,7 +27,6 @@ class CaseUpdate < ActiveRecord::Base
   
 	has_many :attachments, as: :attachable, dependent: :destroy
 	
-  validates_presence_of :case_id
   validate :case_update
   
   def case_update
