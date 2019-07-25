@@ -37,8 +37,8 @@ class Case < ActiveRecord::Base
   
 	accepts_nested_attributes_for :extra_properties, allow_destroy: true
 	
-  validates_presence_of :case_queue_id, :name, :subject, :priority, :status, :received_via
-  validate :phone_or_email
+  validates_presence_of :case_queue_id, :subject, :priority, :status, :received_via
+  # validate :phone_or_email
   
   def self.valid_states
     ['new', 'open', 'closed']
@@ -77,9 +77,9 @@ class Case < ActiveRecord::Base
 
   private
 
-    def phone_or_email
-      if phone.blank? && email.blank?
-        errors.add(:base, "Either an email address or phone number must be provided.")
-      end
-    end
+    #def phone_or_email
+    #  if phone.blank? && email.blank?
+    #    errors.add(:base, "Either an email address or phone number must be provided.")
+    #  end
+    #end
 end

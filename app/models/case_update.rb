@@ -31,7 +31,7 @@ class CaseUpdate < ActiveRecord::Base
   validate :case_update
   
   def case_update
-    if response.blank? && private_note.blank? && new_state.blank? && new_priority.blank? && new_assignee.nil?
+    if response.blank? && private_note.blank? && new_state.blank? && new_priority.blank? && new_assignee.nil? && pbx_db_cdr_id.nil? && pbx_sms_id.nil?
       errors.add(:base, "No update was specified.")
     end
   end
