@@ -4,9 +4,11 @@ class Customer < ActiveRecord::Base
   belongs_to :pbx_domain
   belongs_to :affiliate
 	
+	has_many :cases
   has_many :comments, -> { order(created_at: :desc) }, as: :commentable
   has_many :extra_properties, as: :extra_property
-  accepts_nested_attributes_for :comments, allow_destroy: true, reject_if: proc { |attributes| attributes['content'].blank? }
+  
+	accepts_nested_attributes_for :comments, allow_destroy: true, reject_if: proc { |attributes| attributes['content'].blank? }
   accepts_nested_attributes_for :extra_properties, allow_destroy: true
   
   before_validation :normalize_phones

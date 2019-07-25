@@ -30,11 +30,13 @@ class Case < ActiveRecord::Base
   belongs_to :user
   belongs_to :customer
   belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
-  
+	
   has_many :extra_properties, -> { order "sort, name" }, as: :extra_property
   has_many :updates, class_name: 'CaseUpdate', dependent: :destroy
   has_many :attachments, as: :attachable, dependent: :destroy
   
+	accepts_nested_attributes_for :extra_properties, allow_destroy: true
+	
   validates_presence_of :case_queue_id, :name, :subject, :priority, :status, :received_via
   validate :phone_or_email
   
@@ -44,6 +46,28 @@ class Case < ActiveRecord::Base
   
   def self.valid_priorities
     ['normal', 'high', 'urgent']
+  end
+	
+  def get_property(name)
+    a = extra_properties.find { |x| x.name == name }
+    a.nil? ? "" : a.value
+  end
+  
+  def set_property(name, value)
+    a = extra_properties.find { |x| x.name == name }
+    if [true, false].include? value
+      value = (value ? "Yes" : "No")
+    end
+    
+    if a.nil?
+      self.extra_properties.build(name: name, value: value) unless value.blank?
+    else
+      if value.blank?
+        a.destroy
+      else
+        a.update(value: value)
+      end
+    end
   end
   
   # PUNDIT
