@@ -24,7 +24,7 @@ class Customer < ActiveRecord::Base
     end
   end
   
-  def calls
+  def calls(pbx_domain_id)
     list = []
     list << mobile_phone unless mobile_phone.blank?
     list << other_phone unless other_phone.blank?
