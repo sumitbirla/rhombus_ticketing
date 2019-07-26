@@ -8,7 +8,7 @@ class CaseMailer < ApplicationMailer
     body += "[case:::#{case_update.case.id}:::]"
     
     mail(from: "#{case_update.case.case_queue.reply_name} <#{case_update.case.case_queue.reply_email}>",
-         to: case_update.case.email,
+         to: case_update.case.email.presence || case_update.case.customer.email,
          subject: "RE: #{case_update.case.subject}",
          body: body)
   end
