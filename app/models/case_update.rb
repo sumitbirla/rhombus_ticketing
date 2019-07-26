@@ -20,6 +20,8 @@
 class CaseUpdate < ActiveRecord::Base
   self.table_name = "crm_case_updates"
   
+  attr_accessor :sms_source
+  
 	belongs_to :case
   belongs_to :user
   belongs_to :pbx_sms

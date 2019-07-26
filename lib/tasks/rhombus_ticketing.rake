@@ -57,6 +57,7 @@ namespace :rhombus_ticketing do
     
     upd = CaseUpdate.create!(case_id: c.id,
                              received_at: msg.date,
+                             received_via: :email,
                              raw_data: msg.header.raw_source,
                              response: desc )
     

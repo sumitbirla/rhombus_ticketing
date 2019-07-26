@@ -8,8 +8,6 @@ module CaseHelper
       css_class = 'label-info'
     elsif status == 'open'
       css_class = 'label-success'
-    elsif status == 'closed'
-      css_class = 'label-danger'
     else
       css_class = 'label-default'
     end
