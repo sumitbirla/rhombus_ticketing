@@ -34,6 +34,17 @@ class Customer < ActiveRecord::Base
             .order(start_time: :desc)
   end
   
+  def sms(pbx_domain_id)
+    list = []
+    list << mobile_phone unless mobile_phone.blank?
+    list << other_phone unless other_phone.blank?
+    
+    PbxSms.where(pbx_domain_id: pbx_domain_id)
+          .where("source IN (?) OR destination IN (?)", list, list)
+          .where(forwarded: false)
+          .order(timestamp: :desc)
+  end
+  
   def get_property(name)
     a = extra_properties.find { |x| x.name == name }
     a.nil? ? "" : a.value
