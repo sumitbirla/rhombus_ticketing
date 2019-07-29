@@ -45,6 +45,17 @@ class Customer < ActiveRecord::Base
           .order(timestamp: :desc)
   end
   
+  def faxes(pbx_domain_id)
+    list = []
+    list << mobile_phone unless mobile_phone.blank?
+    list << other_phone unless other_phone.blank?
+    
+    PbxDbCdr.where(pbx_domain_id: pbx_domain_id)
+            .where("sip_from_user IN (?) OR sip_req_user IN (?)", list, list)
+            .where("fax_pages_transferred > ?", 0)
+            .order(start_time: :desc)
+  end
+  
   def get_property(name)
     a = extra_properties.find { |x| x.name == name }
     a.nil? ? "" : a.value
