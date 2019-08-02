@@ -45,11 +45,13 @@ namespace :rhombus_ticketing do
       
       c = Case.find_or_create_by!(customer_id: cust.id, case_queue_id: q.id, status: [:new, :open]) do |x|
         x.status = :new
-        assigned_to = q.initial_assignment
-        name = msg[:from].display_names.first || msg.from[0],
-        email = msg.from[0],
-        subject = msg.subject.presence || "No Subject",
-        received_via = :email
+        x.assigned_to = q.initial_assignment
+        x.name = msg[:from].display_names.first || msg.from[0]
+        x.email = msg.from[0]
+        x.subject = msg.subject.presence || "No Subject"
+        x.received_via = :email
+        x.priority = :normal
+        x.status = :new
       end
     end
     
