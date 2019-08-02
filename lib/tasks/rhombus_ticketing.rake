@@ -48,6 +48,7 @@ namespace :rhombus_ticketing do
         x.name = msg[:from].display_names.first || msg.from[0]
         x.email = msg.from[0]
         x.subject = msg.subject.presence || "No Subject"
+        x.description = "Auto Generated"
         x.received_via = :email
         x.priority = :normal
         x.status = :new
