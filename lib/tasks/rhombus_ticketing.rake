@@ -48,7 +48,7 @@ namespace :rhombus_ticketing do
         assigned_to = q.initial_assignment
         name = msg[:from].display_names.first || msg.from[0],
         email = msg.from[0],
-        subject = msg.subject,
+        subject = msg.subject.presence || "No Subject",
         received_via = :email
       end
     end
