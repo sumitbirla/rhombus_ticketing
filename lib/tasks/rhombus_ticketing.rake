@@ -44,7 +44,6 @@ namespace :rhombus_ticketing do
       end
       
       c = Case.find_or_create_by!(customer_id: cust.id, case_queue_id: q.id, status: [:new, :open]) do |x|
-        x.status = :new
         x.assigned_to = q.initial_assignment
         x.name = msg[:from].display_names.first || msg.from[0]
         x.email = msg.from[0]
@@ -52,6 +51,7 @@ namespace :rhombus_ticketing do
         x.received_via = :email
         x.priority = :normal
         x.status = :new
+        x.received_at = DateTime.now
       end
     end
     
