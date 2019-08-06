@@ -83,7 +83,7 @@ namespace :rhombus_ticketing do
     user = User.find_by(email: msg.sender)   
     c.update_attribute(:user_id, user.id) unless user.nil?
     
-    # mail.delete
+    mail.delete
     
     if c.updates.count > 1
       @logger.info "Case ##{c.id} received an update"
