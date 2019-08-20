@@ -8,7 +8,7 @@ class CaseMailer < ApplicationMailer
     body += "[case:::#{case_update.case.id}:::]"
 		
 		# Attachments if any
-		case_update.files.each { |f| attachments[f.filename] = f.download }
+		case_update.files.each { |f| attachments[f.filename.to_s] = f.download }
     
     mail(from: "#{case_update.case.case_queue.reply_name} <#{case_update.case.case_queue.reply_email}>",
          to: case_update.case.email.presence || case_update.case.customer.email,
