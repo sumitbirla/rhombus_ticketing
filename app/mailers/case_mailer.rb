@@ -5,7 +5,7 @@ class CaseMailer < ApplicationMailer
     
     body = case_update.response + "\n\n"
     body += case_update.case.case_queue.reply_signature + "\n"
-    body += "[case:::#{case_update.case.id}:::]"
+    body += "[case:::#{case_update.case.id}:::]\n\n"
 		
 		# Attachments if any
 		case_update.files.each { |f| attachments[f.filename.to_s] = f.download }
