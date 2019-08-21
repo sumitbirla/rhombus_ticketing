@@ -30,9 +30,9 @@ class CaseUpdate < ActiveRecord::Base
 	has_many :attachments, as: :attachable, dependent: :destroy
   has_many_attached :files
 	
-  validate :case_update
+  validate :has_content?
   
-  def case_update
+  def has_content?
     if response.blank? && 
       private_note.blank? && 
       new_state.blank? && 
