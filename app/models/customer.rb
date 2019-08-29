@@ -17,6 +17,8 @@ class Customer < ActiveRecord::Base
 	validates_presence_of :affiliate_id, :name
 	validates_uniqueness_of :mobile_phone, allow_blank: true, scope: :affiliate_id
 	validates_uniqueness_of :other_phone, allow_blank: true, scope: :affiliate_id
+	validates_uniqueness_of :email, allow_blank: true, scope: :affiliate_id
+	validates_uniqueness_of :other_email, allow_blank: true, scope: :affiliate_id
   
   def contact_info
     if mobile_phone.blank? && other_phone.blank? && email.blank?
