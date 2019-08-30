@@ -83,6 +83,24 @@ class Customer < ActiveRecord::Base
   def to_s
     name
   end
+  
+  def self.deduplicate(cust_id1, cust_id2)
+    c1 = Customer.find(cust_id1)
+    c2 = Customer.find(cust_id2)
+    
+    attrs = [ "email", "other_email", "mobile_phone", "other_phone", "notes", "address" ]
+    attrs.each do |x|
+      if c1.attributes[x].blank? && !c2.attributes[x].blank?
+        c1.assign_attributes(x => c2.attributes[x])
+      end
+    end
+    
+    c1.save(validate: false)
+    Case.where(customer_id: c2.id).update_all(customer_id: c1.id)
+    c2.destroy
+    
+    puts "Customer #{c1.name} [#{c1.id}] merged with #{c2.name} [#{c2.id}]"
+  end
         
   
 	private
