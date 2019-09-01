@@ -25,6 +25,8 @@ class Case < ActiveRecord::Base
   include Exportable
   
   self.table_name = "crm_cases"
+	
+	before_save :set_last_inbound
   
   belongs_to :case_queue
   belongs_to :user
@@ -77,6 +79,12 @@ class Case < ActiveRecord::Base
   end
 
   private
+	
+		def set_last_inbound
+			if last_inbound_at.nil?
+				self.last_inbound_at = DateTime.now
+			end
+		end
 
     #def phone_or_email
     #  if phone.blank? && email.blank?
