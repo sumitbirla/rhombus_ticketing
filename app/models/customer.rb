@@ -1,4 +1,6 @@
 class Customer < ActiveRecord::Base
+  include Exportable
+  
   self.table_name = "crm_customers"
   
   belongs_to :pbx_domain
