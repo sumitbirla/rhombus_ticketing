@@ -73,6 +73,34 @@ class Case < ActiveRecord::Base
     end
   end
   
+  def self.to_csv(list)
+  
+    CSV.generate do |csv|
+      csv << [ "ID", "Queue", "Received", "Received Via", "Status", "Priority", "Assigned To", "Customer Name", "Customer Mobile", "Customer Other Phone", "Customer Email", "Customer Other Email", "Notes", "Request Date", "Follow Up Date", "Result", "Last Inbound" ]
+      list.each do |x| 
+        csv << [ x.id,
+                 x.case_queue.to_s,
+                 x.received_at,
+                 x.received_via,
+                 x.status,
+                 x.priority,
+                 x.assignee.to_s,
+                 x.customer.name,
+                 x.customer.mobile_phone,
+                 x.customer.other_phone,
+                 x.customer.email,
+                 x.customer.other_email,
+                 x.description,
+                 x.request_date,
+                 x.follow_up_date,
+                 x.result,
+                 x.last_inbound_at
+                ]
+      end
+    end
+  
+  end
+  
   # PUNDIT
   def self.policy_class
     ApplicationPolicy
