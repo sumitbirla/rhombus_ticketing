@@ -87,7 +87,7 @@ namespace :rhombus_ticketing do
     
     if c.updates.count > 1
       @logger.info "Case ##{c.id} received an update"
-      CaseMailer.updated(c).deliver_later
+      CaseMailer.updated(upd).deliver_later
     else
       @logger.info "Case ##{c.id} created"
       CaseMailer.assigned(c).deliver_later

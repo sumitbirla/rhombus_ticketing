@@ -5,7 +5,7 @@ class CaseMailer < ApplicationMailer
     
     body = case_update.response + "\n\n"
     body += case_update.case.case_queue.reply_signature + "\n"
-    body += "[case:::#{case_update.case.id}:::]\n\n"
+    body += "[case:::#{case_update.case_id}:::]\n\n"
 		
 		# Attachments if any
 		case_update.files.each { |f| attachments[f.filename.to_s] = f.download }
@@ -27,7 +27,7 @@ class CaseMailer < ApplicationMailer
   
   def updated(case_update)
     @case_update = case_update
-    headers["X-Rhombus-Case-ID"] = case_update.case.id
+    headers["X-Rhombus-Case-ID"] = case_update.case_id
   
     mail(from: "#{case_update.case.case_queue.reply_name} <#{case_update.case.case_queue.reply_email}>",
          to: User.find(case_update.case.assigned_to).email,
