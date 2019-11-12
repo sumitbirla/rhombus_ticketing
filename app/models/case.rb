@@ -40,7 +40,7 @@ class Case < ActiveRecord::Base
 	accepts_nested_attributes_for :extra_properties, allow_destroy: true
   accepts_nested_attributes_for :updates, allow_destroy: true
 	
-  validates_presence_of :case_queue_id, :subject, :priority, :status, :received_via
+  validates_presence_of :case_queue_id, :priority, :status, :received_via
   # validate :phone_or_email
   
   def self.valid_states
