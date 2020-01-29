@@ -18,7 +18,7 @@ class CasesController < ApplicationController
       assigned_to: q.initial_assignment    
     )
     
-    if @case.save
+    if @case.web_submission_valid? && @case.save
       CaseMailer.assigned(@case).deliver_later unless q.initial_assignment.nil?
       redirect_to action: 'show', id: @case.id
     else

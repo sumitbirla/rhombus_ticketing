@@ -100,6 +100,13 @@ class Case < ActiveRecord::Base
     end
   
   end
+	
+	def web_submission_valid?
+		errors.add(:name, "Please enter your name.") if name.blank?
+		errors.add(:base, "Either an email address or phone number must be provided.") if phone.blank? && email.blank?
+		errors.add(:message, "Please type in your message to us.") if description.blank?
+		return errors.count == 0
+	end
   
   # PUNDIT
   def self.policy_class
