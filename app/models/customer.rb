@@ -2,6 +2,7 @@ class Customer < ActiveRecord::Base
   include Exportable
   
   self.table_name = "crm_customers"
+	self.inheritance_column = :_type_disabled
   
   belongs_to :pbx_domain
   belongs_to :affiliate
