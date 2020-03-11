@@ -108,6 +108,10 @@ class Case < ActiveRecord::Base
 		return errors.count == 0
 	end
   
+  def has_flag?(f)
+    flags && flags.split(";").include?(f)
+  end
+  
   # PUNDIT
   def self.policy_class
     ApplicationPolicy
