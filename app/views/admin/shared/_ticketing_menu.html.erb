@@ -1,24 +1,23 @@
-
 <% max = TicketingCache.open_tickets_count %>
 <li class="<%= 'active' if request.original_url.include? 'admin/ticketing' %>">
-  <a href="#"><i class="fa fa-headset fa-fw"></i> Ticketing  
+  <a href="#"><i class="fa fa-headset fa-fw"></i> Ticketing
     <% if max > 0 %>
-    &nbsp; &nbsp; <span class="badge"><%= max %></span>
+      &nbsp; &nbsp; <span class="badge"><%= max %></span>
     <% end %>
     <span class="fa arrow"></span></a>
   <ul class="nav nav-second-level">
     <% TicketingCache.queue_list.each do |q| %>
-    <li>
-      <%= link_to admin_ticketing_cases_path(queue_id: q.id, status: :new) do %>
-        <%= q.name %>
-        <% count = TicketingCache.open_tickets_count_queue(q.id) %>
-        <% if count > 0 %>
-          &nbsp; &nbsp; <span class="badge"><%= count %></span>
+      <li>
+        <%= link_to admin_ticketing_cases_path(queue_id: q.id, status: :new) do %>
+          <%= q.name %>
+          <% count = TicketingCache.open_tickets_count_queue(q.id) %>
+          <% if count > 0 %>
+            &nbsp; &nbsp; <span class="badge"><%= count %></span>
           <% end %>
-      <% end %>
-    </li>
+        <% end %>
+      </li>
     <% end %>
-    <% if current_user.has_permission?('CaseQueue', 'index')%>
+    <% if current_user.has_permission?('CaseQueue', 'index') %>
       <li><%= link_to "Configure", admin_ticketing_case_queues_path %></li>
     <% end %>
   </ul>

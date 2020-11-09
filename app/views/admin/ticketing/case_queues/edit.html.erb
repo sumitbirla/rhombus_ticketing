@@ -11,7 +11,7 @@
   <%= f.association :assigned %>
   <%= f.input :reply_name %>
   <%= f.input :reply_email %>
-  <%= f.input :reply_signature, input_html: { class: 'span4', rows: 5 } %>
+  <%= f.input :reply_signature, input_html: {class: 'span4', rows: 5} %>
   <%= ckeditor_input(@case_queue, "web_instruction") %>
   <%= ckeditor_input(@case_queue, "web_confirmation") %>
   <%= f.input :affiliate_id %>
@@ -19,35 +19,35 @@
   <%= f.input :blocked_emails %>
 
   <div class="panel panel-info">
-	<div class="panel-heading">POP3 Gateway</div>
+    <div class="panel-heading">POP3 Gateway</div>
     <div class="panel-body">
-        <%= f.input :pop3_enabled, label: 'Enabled' %>
-        <%= f.input :pop3_host, label: 'Host', placeholder: 'eg. pop3.mydomain.com' %>
-        <%= f.input :pop3_port, label: 'Port' %>
-        <%= f.input :pop3_use_ssl, label: 'Use SSL' %>
-        <%= f.input :pop3_login, label: 'Login' %>
-        <%= f.input :pop3_password, as: :string, label: 'Password' %>
+      <%= f.input :pop3_enabled, label: 'Enabled' %>
+      <%= f.input :pop3_host, label: 'Host', placeholder: 'eg. pop3.mydomain.com' %>
+      <%= f.input :pop3_port, label: 'Port' %>
+      <%= f.input :pop3_use_ssl, label: 'Use SSL' %>
+      <%= f.input :pop3_login, label: 'Login' %>
+      <%= f.input :pop3_password, as: :string, label: 'Password' %>
     </div>
   </div>
-  
-  <%= button_tag "Save changes", :class => "btn btn-primary", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait ..." } %>
+
+  <%= button_tag "Save changes", :class => "btn btn-primary", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Please wait ..."} %>
 
 <% end %>
 
 
 
 <% content_for :title do %>
-	Case Queues: <%= @case_queue.name %>
+  Case Queues: <%= @case_queue.name %>
 <% end %>
 
 
 <% content_for :menu do
-    render "admin/shared/ticketing_menu"
+  render "admin/shared/ticketing_menu"
 end %>
 
 
 <% content_for :breadcrumbs do %>
-	<li><a href="#">Ticketing</a></li>
-	<li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
-	<li class="active"><%= @case_queue.name %></li>
+  <li><a href="#">Ticketing</a></li>
+  <li><%= link_to "Queues", admin_ticketing_case_queues_path %></li>
+  <li class="active"><%= @case_queue.name %></li>
 <% end %>

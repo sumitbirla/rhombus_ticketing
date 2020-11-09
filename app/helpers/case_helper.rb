@@ -1,8 +1,8 @@
 module CaseHelper
-  
+
   def case_status_indicator(status)
 
-		status = status.status if status.class.name == "Case"
+    status = status.status if status.class.name == "Case"
 
     if status == 'new'
       css_class = 'label-info'
@@ -11,13 +11,13 @@ module CaseHelper
     else
       css_class = 'label-default'
     end
-  
+
     "<span class='label #{css_class}'>#{status}</span>".html_safe
   end
-  
+
   def case_priority_indicator(priority)
 
-		priority = priority.priority if priority.class.name == "Case"
+    priority = priority.priority if priority.class.name == "Case"
 
     if priority == 'high'
       css_class = 'label-warning'
@@ -28,8 +28,8 @@ module CaseHelper
     else
       css_class = 'label-default'
     end
-  
+
     "<span class='label #{css_class}'>#{priority}</span>".html_safe
   end
-  
+
 end

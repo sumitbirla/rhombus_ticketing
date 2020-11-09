@@ -1,11 +1,11 @@
-  <select id="selAction" class="form-control" style="display: inline; width: 75%">
-    <option> - - Select Action - - </option>
-	  <option method="get" value="/admin/ticketing/case/new?queue_id=<%= params[:queue_id]%>">New Ticket</option>
-    <option method="post" value="/admin/ticketing/cases_delete_batch">Delete Selected</option>
-    <optgroup label="Change case status to ">
-        <option method="post" value="/admin/ticketing/cases_update_status?status=new">New</option>
-        <option method="post" value="/admin/ticketing/cases_update_status?status=open">Open</option>
-        <option method="post" value="/admin/ticketing/cases_update_status?status=closed">Closed</option>
-    </optgroup>
-  </select>
-  <input type="button" class="btn btn-default btn-small" id="btnAction" value="Go" />
+<select id="selAction" class="form-control" style="display: inline; width: 75%">
+  <option> - - Select Action - -</option>
+  <option method="get" value="/admin/ticketing/case/new?queue_id=<%= params[:queue_id] %>">New Ticket</option>
+  <option method="post" value="/admin/ticketing/cases_delete_batch">Delete Selected</option>
+  <optgroup label="Change case status to ">
+    <option method="post" value="/admin/ticketing/cases_update_status?status=new">New</option>
+    <option method="post" value="/admin/ticketing/cases_update_status?status=open">Open</option>
+    <option method="post" value="/admin/ticketing/cases_update_status?status=closed">Closed</option>
+  </optgroup>
+</select>
+<input type="button" class="btn btn-default btn-small" id="btnAction" value="Go"/>

@@ -1,21 +1,22 @@
-  	<tr class="<%= "light" if c.status == "closed" %>">
-      <td><input type="checkbox" name="case_id[]" class="multiselect" value="<%= c.id %>"/></td>
-  		<td><%= link_to c.id, admin_ticketing_case_path(c) %></td>
-      <td nowrap><%= systime c.received_at %></td>
-      <td>
-        <% if c.user %>
-          <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
-        <% else %>
-          <%= c.name %>
-        <% end %>
-      </td>
-  		<td><%= truncate c.subject, length: 40 %></td>
-      <td><%= case_status_indicator c %></td>
-      <td><%= case_priority_indicator c %></td>
-  		<td><% unless c.assignee.nil? %>
-  			<%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
-  			<% else %>
-  			- none -
-  			<% end%>
-  		</td>
-  	</tr>
+<tr class="<%= "light" if c.status == "closed" %>">
+  <td><input type="checkbox" name="case_id[]" class="multiselect" value="<%= c.id %>"/></td>
+  <td><%= link_to c.id, admin_ticketing_case_path(c) %></td>
+  <td nowrap><%= systime c.received_at %></td>
+  <td>
+    <% if c.user %>
+      <%= link_to c.user.name, admin_system_user_path(c.user_id) %>
+    <% else %>
+      <%= c.name %>
+    <% end %>
+  </td>
+  <td><%= truncate c.subject, length: 40 %></td>
+  <td><%= case_status_indicator c %></td>
+  <td><%= case_priority_indicator c %></td>
+  <td>
+    <% unless c.assignee.nil? %>
+      <%= link_to c.assignee.name, admin_system_user_path(c.assigned_to) %>
+    <% else %>
+      - none -
+    <% end %>
+  </td>
+</tr>

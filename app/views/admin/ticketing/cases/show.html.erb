@@ -1,25 +1,26 @@
 <h2>
   <div class="pull-right">
-    <%= case_status_indicator(@case) %> 
-    <%= case_priority_indicator(@case)%>
+    <%= case_status_indicator(@case) %>
+    <%= case_priority_indicator(@case) %>
   </div>
   Case #<%= @case.id %></h2>
 
 <table class="table summary table-condensed table-bordered">
-  <% unless @case.assignee.nil?%>
-  <tr>
-    <td class="col-md-3">Assigned to</td>
-    <td><%= link_to @case.assignee, admin_system_user_path(@case.assignee) %></td>
-  </tr>
+  <% unless @case.assignee.nil? %>
+    <tr>
+      <td class="col-md-3">Assigned to</td>
+      <td><%= link_to @case.assignee, admin_system_user_path(@case.assignee) %></td>
+    </tr>
   <% end %>
   <tr>
     <td>Received</td>
-    <td><%= systime @case.received_at %>  &nbsp; <span class="light">(<%= time_ago_in_words(@case.received_at)%> ago)</span></td>
+    <td><%= systime @case.received_at %>  &nbsp;
+      <span class="light">(<%= time_ago_in_words(@case.received_at) %> ago)</span></td>
   </tr>
   <tr>
     <td>Via</td>
     <td>
-      <%= @case.received_via %> 
+      <%= @case.received_via %>
       <%= link_to "raw data", raw_data_admin_ticketing_case_path(@case), class: "small", target: "_new" %>
     </td>
   </tr>
@@ -45,14 +46,14 @@
     </td>
   </tr>
   <% unless @case.phone.blank? %>
-  <tr>
-    <td>Phone</td>
-    <td>
-      <%= link_to "tel:#{@case.phone}" do %>
-        <i class="fa fa-phone"></i> <%= number_to_phone(@case.phone) %>
-      <% end %>
-    </td>
-  </tr>
+    <tr>
+      <td>Phone</td>
+      <td>
+        <%= link_to "tel:#{@case.phone}" do %>
+          <i class="fa fa-phone"></i> <%= number_to_phone(@case.phone) %>
+        <% end %>
+      </td>
+    </tr>
   <% end %>
   <tr>
     <td>Subject</td>
@@ -63,21 +64,21 @@
     <td><%= @case.description.gsub("\n", "<br>").html_safe %></td>
   </tr>
   <% unless @case.attachments.blank? %>
-  <tr>
-    <td>Attachments</td>
-    <td>
-      <ul style="padding-left: 0;">
-      <% @case.attachments.each do |attch| %>
-        <li style="display: inline-block; text-align: center; width: 80px; margin-top: 8px;">
-          <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
-            <%= icon_for_mimetype(attch.content_type, "fa-4x text-muted") %><br>
-            <span style="font-size: 8pt;"><%= truncate(attch.file_name, length: 12) %></span>
+    <tr>
+      <td>Attachments</td>
+      <td>
+        <ul style="padding-left: 0;">
+          <% @case.attachments.each do |attch| %>
+            <li style="display: inline-block; text-align: center; width: 80px; margin-top: 8px;">
+              <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
+                <%= icon_for_mimetype(attch.content_type, "fa-4x text-muted") %><br>
+                <span style="font-size: 8pt;"><%= truncate(attch.file_name, length: 12) %></span>
+              <% end %>
+            </li>
           <% end %>
-        </li>
-      <% end%>
-    </ul>
-    </td>
-  </tr>
+        </ul>
+      </td>
+    </tr>
   <% end %>
 </table>
 
@@ -91,74 +92,74 @@
       <% unless update.response.blank? %>
         <%= update.response.gsub("\n", "<br>").html_safe %>
       <% end %>
-      
+
       <% unless update.private_note.blank? %>
         <div class="bs-callout bs-callout-warning"><%= update.private_note %></div>
       <% end %>
     </div>
     <div class="panel-footer">
       <% unless update.new_state.blank? %>
-      <b>status&rarr;</b><%= update.new_state %> &nbsp; &nbsp; &nbsp; 
+        <b>status&rarr;</b><%= update.new_state %> &nbsp; &nbsp; &nbsp;
       <% end %>
-    
+
       <% unless update.new_priority.blank? %>
-      <b>priority&rarr;</b><%= update.new_priority %> &nbsp; &nbsp; &nbsp; 
+        <b>priority&rarr;</b><%= update.new_priority %> &nbsp; &nbsp; &nbsp;
       <% end %>
-    
+
       <% unless update.new_assignee.nil? %>
-      <b>reassigned&rarr;</b><%= User.find(update.new_assignee) %>
+        <b>reassigned&rarr;</b><%= User.find(update.new_assignee) %>
       <% end %>
-    
+
       <div class="pull-right light">
         <% update.attachments.each do |attch| %>
-            <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
-              <%= icon_for_mimetype(attch.content_type, "text-muted") %> 
-              <%= truncate(attch.file_name, length: 12) %> &nbsp; &nbsp; 
-            <% end %>
-        <% end%>
-        
+          <%= link_to cdn_download_url(attch.file_path), target: "_blank" do %>
+            <%= icon_for_mimetype(attch.content_type, "text-muted") %>
+            <%= truncate(attch.file_name, length: 12) %> &nbsp; &nbsp;
+          <% end %>
+        <% end %>
+
         <% unless update.raw_data.blank? %>
           <%= link_to "raw data", raw_data_admin_ticketing_case_update_path(update), class: "small" %>
         <% end %>
       </div>
     </div>
-    
+
   </div>
 <% end %>
 
 
-<% 
-  case_update = CaseUpdate.new(case_id: @case.id, user_id: current_user.id) 
+<%
+  case_update = CaseUpdate.new(case_id: @case.id, user_id: current_user.id)
   role_ids = Role.joins(:permissions).where("core_permissions.resource = 'Case' OR super_user=1").distinct(:id).pluck(:id)
   assignee_list = User.where(role_id: role_ids).select(:id, :name).order(:name)
 %>
-<%= form_for [:admin, :ticketing, case_update ] do |f| %>
-<div class="panel panel-success">
-  <div class="panel-heading">
-    Your response:
-    <span class="pull-right"><i class="fa fa-user"></i> <%= current_user %></span>
-  </div>
-  <div class="panel-body">
-    <%= f.hidden_field :user_id %>
-    <%= f.hidden_field :case_id %>
-    <div class="row">
-      <div class="col-md-8"><%= f.text_area :response, rows: 8, style: "width: 100%", placeholder: "Response to customer..." %></div>
-      <div class="col-md-4"><%= f.text_area :private_note, rows: 5, style: "width: 100%; background-color: #FFF8DC;", placeholder: "Private note..." %></div>
+<%= form_for [:admin, :ticketing, case_update] do |f| %>
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      Your response:
+      <span class="pull-right"><i class="fa fa-user"></i> <%= current_user %></span>
+    </div>
+    <div class="panel-body">
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :case_id %>
+      <div class="row">
+        <div class="col-md-8"><%= f.text_area :response, rows: 8, style: "width: 100%", placeholder: "Response to customer..." %></div>
+        <div class="col-md-4"><%= f.text_area :private_note, rows: 5, style: "width: 100%; background-color: #FFF8DC;", placeholder: "Private note..." %></div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <%= f.select :new_state, Case.valid_states - [@case.status], prompt: "- change state -" %>
+      <%= f.select :new_priority, Case.valid_priorities - [@case.priority], prompt: "- change priority -" %>
+      <%= f.collection_select :new_assignee, assignee_list, :id, :name, prompt: "- assign to -" %>
+      <%= f.submit "Submit Update", class: "btn btn-primary pull-right" %>
+      <div style="clear: right;"></div>
     </div>
   </div>
-  <div class="panel-footer">
-    <%= f.select :new_state, Case.valid_states - [@case.status], prompt: "- change state -" %>
-    <%= f.select :new_priority, Case.valid_priorities - [@case.priority], prompt: "- change priority -" %>
-    <%= f.collection_select :new_assignee, assignee_list, :id, :name, prompt: "- assign to -" %>
-    <%= f.submit "Submit Update", class: "btn btn-primary pull-right" %>
-    <div style="clear: right;"></div>
-  </div>
-</div>
 <% end %>
 
-  
 
-  
+
+
 
 
 <% content_for :title do %>
@@ -166,7 +167,7 @@
 <% end %>
 
 <% content_for :breadcrumbs do %>
-	<li><a href="#">Ticketing</a></li>
+  <li><a href="#">Ticketing</a></li>
   <li><%= link_to @case.case_queue.name, admin_ticketing_cases_path(queue_id: @case.case_queue_id, status: :open) %></li>
   <li>Case #<%= @case.id %></li>
 <% end %>

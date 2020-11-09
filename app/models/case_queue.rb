@@ -25,7 +25,7 @@
 
 class CaseQueue < ActiveRecord::Base
   include Exportable
-  
+
   self.table_name = "crm_queues"
   has_many :cases, dependent: :destroy
   belongs_to :affiliate
@@ -36,7 +36,7 @@ class CaseQueue < ActiveRecord::Base
   def to_s
     name
   end
-  
+
   # PUNDIT
   def self.policy_class
     ApplicationPolicy
