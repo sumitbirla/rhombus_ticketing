@@ -23,20 +23,16 @@
 
 class Case < ActiveRecord::Base
   include Exportable
-
   self.table_name = "crm_cases"
 
   before_save :set_last_inbound
-
   belongs_to :case_queue
   belongs_to :user
   belongs_to :customer
   belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
-
   has_many :extra_properties, -> { order "sort, name" }, as: :extra_property
-  has_many :updates, class_name: 'CaseUpdate', dependent: :destroy
+  has_many :updates,  -> { order "created_at" }, class_name: 'CaseUpdate', dependent: :destroy
   has_many :attachments, as: :attachable, dependent: :destroy
-
   accepts_nested_attributes_for :extra_properties, allow_destroy: true
   accepts_nested_attributes_for :updates, allow_destroy: true
 

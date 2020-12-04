@@ -21,15 +21,12 @@ class CaseUpdate < ActiveRecord::Base
   self.table_name = "crm_case_updates"
 
   attr_accessor :sms_source
-
   belongs_to :case
   belongs_to :user
   belongs_to :pbx_sms
   belongs_to :pbx_db_cdr
-
   has_many :attachments, as: :attachable, dependent: :destroy
   has_many_attached :files
-
   validate :has_content?
 
   def has_content?
