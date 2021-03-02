@@ -2,23 +2,34 @@
 #
 # Table name: crm_cases
 #
-#  id            :integer          not null, primary key
-#  case_queue_id :integer          not null
-#  received_at   :datetime         not null
-#  priority      :string(255)      not null
-#  status        :string(255)      not null
-#  assigned_to   :integer
-#  attachments   :string(255)
-#  user_id       :integer
-#  name          :string(255)      not null
-#  email         :string(255)
-#  phone         :string(255)
-#  subject       :string(255)      not null
-#  description   :text(65535)
-#  received_via  :string(255)      not null
-#  raw_data      :text(4294967295)
-#  created_at    :datetime
-#  updated_at    :datetime
+#  id              :integer          not null, primary key
+#  assigned_to     :integer
+#  description     :text(65535)
+#  email           :string(255)
+#  follow_up_date  :date
+#  last_inbound_at :datetime
+#  lead_source     :string(255)
+#  name            :string(255)      not null
+#  phone           :string(255)
+#  priority        :string(255)      not null
+#  raw_data        :text(4294967295)
+#  received_at     :datetime         not null
+#  received_via    :string(255)      not null
+#  request_date    :date
+#  result          :string(255)
+#  result_reason   :string(255)
+#  status          :string(255)      not null
+#  subject         :string(255)      not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  case_queue_id   :integer          not null
+#  customer_id     :integer
+#  external_id     :string(255)
+#  user_id         :integer
+#
+# Indexes
+#
+#  index_cases_on_case_queue_id  (case_queue_id)
 #
 
 class Case < ActiveRecord::Base

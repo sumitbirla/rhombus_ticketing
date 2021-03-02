@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: crm_customers
+#
+#  id                        :integer          not null, primary key
+#  address                   :text(65535)
+#  contact_method_preference :string(255)
+#  contact_time_preference   :string(255)
+#  email                     :string(255)
+#  mobile_phone              :string(255)
+#  name                      :string(255)
+#  notes                     :text(65535)
+#  other_email               :string(255)
+#  other_phone               :string(255)
+#  type                      :string(255)
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  affiliate_id              :integer
+#  pbx_domain_id             :integer
+#
+# Indexes
+#
+#  idx_pbx_domain_id  (pbx_domain_id)
+#
 class Customer < ActiveRecord::Base
   include Exportable
 

@@ -3,18 +3,23 @@
 # Table name: crm_case_updates
 #
 #  id           :integer          not null, primary key
-#  case_id      :integer
-#  received_at  :datetime         not null
-#  user_id      :integer
-#  response     :text(65535)      not null
-#  attachments  :string(255)
-#  raw_data     :text(4294967295)
-#  private_note :text(65535)
-#  new_state    :string(32)       default("")
-#  new_priority :string(32)
 #  new_assignee :integer
+#  new_priority :string(32)
+#  new_state    :string(32)       default("")
+#  private_note :text(65535)
+#  raw_data     :text(4294967295)
+#  received_at  :datetime         not null
+#  received_via :string(255)
+#  response     :text(65535)      not null
 #  created_at   :datetime
 #  updated_at   :datetime
+#  case_id      :integer
+#  new_queue_id :integer
+#  user_id      :integer
+#
+# Indexes
+#
+#  index_case_updates_on_case_id  (case_id)
 #
 
 class CaseUpdate < ActiveRecord::Base

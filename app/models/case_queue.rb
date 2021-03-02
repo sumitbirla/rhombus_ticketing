@@ -3,24 +3,25 @@
 # Table name: crm_queues
 #
 #  id                         :integer          not null, primary key
-#  affiliate_id               :integer
-#  name                       :string(255)      not null
+#  blocked_emails             :text(65535)
+#  inactivity_expiration_days :integer          default(10), not null
 #  initial_assignment         :integer
-#  reply_name                 :string(255)      not null
-#  reply_email                :string(255)      not null
-#  reply_signature            :text(65535)
-#  web_instruction            :text(65535)
-#  web_confirmation           :text(65535)
+#  name                       :string(255)      not null
 #  pop3_enabled               :boolean          not null
+#  pop3_error                 :string(255)
 #  pop3_host                  :string(255)
-#  pop3_port                  :integer          default(110), not null
 #  pop3_login                 :string(255)
 #  pop3_password              :string(255)
+#  pop3_port                  :integer          default(110), not null
 #  pop3_use_ssl               :boolean
-#  pop3_error                 :string(255)
+#  reply_email                :string(255)      not null
+#  reply_name                 :string(255)      not null
+#  reply_signature            :text(65535)
+#  web_confirmation           :text(65535)
+#  web_instruction            :text(65535)
 #  created_at                 :datetime
 #  updated_at                 :datetime
-#  inactivity_expiration_days :integer          default(10), not null
+#  affiliate_id               :integer
 #
 
 class CaseQueue < ActiveRecord::Base
