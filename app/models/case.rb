@@ -41,6 +41,7 @@ class Case < ActiveRecord::Base
   belongs_to :user
   belongs_to :customer
   belongs_to :assignee, class_name: "User", foreign_key: "assigned_to"
+  belongs_to :auto_followup_notification_delivery_method, class_name: "NotificationDeliveryMethod"
   has_many :extra_properties, -> { order "sort, name" }, as: :extra_property
   has_many :updates,  -> { order "created_at" }, class_name: 'CaseUpdate', dependent: :destroy
   has_many :attachments, as: :attachable, dependent: :destroy
